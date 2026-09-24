@@ -5,8 +5,8 @@
 
 // ---- Fill these in with your real project values (safe to expose — these
 // are the PUBLIC url + anon key, not the service_role secret) ----
-const SUPABASE_URL = "https://dmomlxlmfqlnyakqvyav.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_HUv9Ba6XnziMxIdFRT6xFA_jpsimFXv";
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR-PUBLIC-ANON-KEY";
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
