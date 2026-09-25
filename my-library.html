@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Library — Avinash Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<style>
+  :root{
+    --graphite:#15171B; --graphite-2:#1D2025; --bone:#E8E3D8; --bone-dim:#A6A296;
+    --ghost-teal:#4FA39B; --ghost-rose:#C4586B; --line:rgba(232,227,216,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--graphite); color:var(--bone); font-family:'Work Sans',sans-serif; line-height:1.6;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 24px;}
+  a{color:var(--ghost-teal);}
+  h1{font-family:'Newsreader', serif; font-weight:400; font-style:italic; font-size:clamp(28px,4vw,38px); margin:0;}
+
+  header{padding:64px 0 32px; border-bottom:1px solid var(--line);}
+  .back-link{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--bone-dim); text-decoration:none; display:inline-flex; gap:8px; margin-bottom:24px;
+  }
+  .back-link:hover{color:var(--ghost-teal);}
+  .welcome{color:var(--bone-dim); font-size:14px; margin-top:10px;}
+
+  main{padding:48px 0 100px;}
+  .success-banner{
+    background:rgba(79,163,155,.12); border:1px solid var(--ghost-teal); color:var(--ghost-teal);
+    padding:14px 18px; border-radius:6px; font-size:14px; margin-bottom:32px; display:none;
+  }
+  .success-banner.show{display:block;}
+
+  .book-row{
+    display:flex; gap:22px; align-items:center; padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .book-cover{width:80px; height:125px; object-fit:cover; border-radius:2px; flex-shrink:0; background:var(--graphite-2);}
+  .book-meta h3{font-family:'Newsreader', serif; font-style:italic; font-weight:400; font-size:19px; margin:0 0 4px;}
+  .book-meta .sub{color:var(--bone-dim); font-size:13px; margin:0 0 8px;}
+  .progress-track{width:220px; max-width:60vw; height:4px; background:var(--line); border-radius:2px; overflow:hidden; margin-bottom:10px;}
+  .progress-fill{height:100%; background:var(--ghost-teal);}
+  .progress-label{font-size:11.5px; color:var(--bone-dim); margin-bottom:10px;}
+
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    text-decoration:none; color:var(--graphite); background:var(--bone); border:none;
+    padding:10px 18px; border-radius:2px; cursor:pointer; display:inline-block;
+  }
+
+  .empty-state{text-align:center; padding:80px 20px; color:var(--bone-dim);}
+  .empty-state h2{font-family:'Newsreader', serif; font-style:italic; color:var(--bone); font-weight:400; font-size:24px; margin:0 0 10px;}
+  .empty-state p{margin:0 0 24px;}
+
+  .signin-gate{text-align:center; padding:80px 20px;}
+  .signin-gate .btn{margin-top:20px;}
+
+  #loadingState{text-align:center; padding:80px 20px; color:var(--bone-dim); font-size:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back-link" href="index.html">← Back to authoravinashkumar.com</a>
+    <h1>My Library</h1>
+    <p class="welcome" id="welcomeMsg"></p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="success-banner" id="successBanner">Your Digital Edition has been added to your library.</div>
+
+    <div id="loadingState">Loading your library…</div>
+
+    <div id="signinGate" class="signin-gate" style="display:none;">
+      <h2>Sign in to see your library</h2>
+      <p style="color:var(--bone-dim);">Your purchased Digital Editions live here.</p>
+      <a class="btn" href="invisible-threads.html#buy">Sign In / Browse Books</a>
+    </div>
+
+    <div id="libraryContent" style="display:none;"></div>
+
+    <div id="emptyState" class="empty-state" style="display:none;">
+      <h2>Your library is empty</h2>
+      <p>Discover the books of Avinash Kumar.</p>
+      <a class="btn" href="index.html#shelf">Explore Books</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  const SUPABASE_URL2 = SUPABASE_URL;   // reuse values from auth.js
+  const SUPABASE_ANON_KEY2 = SUPABASE_ANON_KEY;
+
+  async function loadLibrary(){
+    const session = await akGetSession();
+    document.getElementById('loadingState').style.display = 'none';
+
+    if (!session) {
+      document.getElementById('signinGate').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('welcomeMsg').textContent =
+      `Welcome, ${session.user.user_metadata?.name || session.user.email}`;
+
+    if (new URLSearchParams(window.location.search).get('purchased') === '1') {
+      document.getElementById('successBanner').classList.add('show');
+    }
+
+    // Library rows are protected by RLS — this query only ever returns
+    // rows where library.user_id = the signed-in user, straight from Postgres.
+    const { data: rows, error } = await sb
+      .from('library')
+      .select('access_status, book_id, books_catalog(title, subtitle, slug, cover_url)')
+      .eq('access_status', 'active');
+
+    if (error) {
+      document.getElementById('emptyState').style.display = 'block';
+      console.error(error);
+      return;
+    }
+
+    if (!rows || rows.length === 0) {
+      document.getElementById('emptyState').style.display = 'block';
+      return;
+    }
+
+    const container = document.getElementById('libraryContent');
+    container.style.display = 'block';
+    container.innerHTML = rows.map(row => {
+      const book = row.books_catalog;
+      return `
+        <div class="book-row">
+          <img class="book-cover" src="${book.cover_url || ''}" alt="${book.title} cover">
+          <div class="book-meta">
+            <h3>${book.title}</h3>
+            <p class="sub">${book.subtitle || ''} · Digital Edition</p>
+            <a class="btn" href="reader.html?book=${book.slug}">Continue Reading →</a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  loadLibrary();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "authoravinashkumar-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless functions backing the Digital Edition + My Library system.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

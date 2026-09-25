@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reader — Avinash Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<style>
+  :root{
+    --graphite:#15171B; --graphite-2:#1D2025; --bone:#E8E3D8; --bone-dim:#A6A296;
+    --ghost-teal:#4FA39B; --ghost-rose:#C4586B; --line:rgba(232,227,216,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--graphite); color:var(--bone); font-family:'Work Sans',sans-serif; display:flex; flex-direction:column;}
+
+  .reader-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:14px 22px; border-bottom:1px solid var(--line); background:var(--graphite-2); flex-shrink:0;
+  }
+  .reader-topbar .title-block{min-width:0;}
+  .reader-topbar .back{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--bone-dim); text-decoration:none; white-space:nowrap;
+  }
+  .reader-topbar .back:hover{color:var(--ghost-teal);}
+  .reader-topbar h1{
+    font-family:'Newsreader', serif; font-style:italic; font-weight:400; font-size:15px; margin:0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .reader-topbar .sub{font-size:11px; color:var(--bone-dim);}
+
+  .reader-body{flex:1; position:relative; overflow:hidden;}
+  #pdfFrame{width:100%; height:100%; border:none; background:var(--graphite);}
+
+  .watermark{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-28deg);
+    font-family:'IBM Plex Mono', monospace; font-size:13px; color:rgba(232,227,216,0.08);
+    pointer-events:none; text-align:center; line-height:1.8; white-space:nowrap; z-index:5;
+  }
+
+  .state-screen{
+    flex:1; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
+    text-align:center; padding:40px 20px;
+  }
+  .state-screen h2{font-family:'Newsreader', serif; font-style:italic; font-weight:400; font-size:22px; margin:0;}
+  .state-screen p{color:var(--bone-dim); font-size:14px; max-width:380px; margin:0;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    text-decoration:none; color:var(--graphite); background:var(--bone); border:none;
+    padding:10px 18px; border-radius:2px; cursor:pointer; display:inline-block;
+  }
+</style>
+</head>
+<body>
+
+<div class="reader-topbar">
+  <a class="back" href="my-library.html">← My Library</a>
+  <div class="title-block" style="text-align:center;">
+    <h1 id="readerTitle">Loading…</h1>
+    <div class="sub" id="readerSub"></div>
+  </div>
+  <div style="width:90px;"></div>
+</div>
+
+<div class="reader-body" id="readerBody">
+  <div class="state-screen" id="loadingScreen">
+    <p>Checking your library…</p>
+  </div>
+</div>
+
+<script>
+  function getBookSlug(){
+    return new URLSearchParams(window.location.search).get('book') || 'invisible-threads';
+  }
+
+  function showState(html){
+    document.getElementById('readerBody').innerHTML = `<div class="state-screen">${html}</div>`;
+  }
+
+  async function loadReader(){
+    const slug = getBookSlug();
+    const session = await akGetSession();
+
+    if (!session) {
+      showState(`
+        <h2>Your session has expired</h2>
+        <p>Please sign in again to continue reading.</p>
+        <a class="btn" href="invisible-threads.html#buy">Sign In</a>
+      `);
+      document.getElementById('readerTitle').textContent = 'Sign in required';
+      return;
+    }
+
+    try {
+      // The ONLY place the book's bytes are ever requested. This calls the
+      // server, which re-checks entitlement in Postgres (RLS + the library
+      // table) before it will hand back a URL — the browser never sees a
+      // permanent or public link to the file.
+      const data = await akCallFunction('get-read-url', { bookSlug: slug });
+
+      document.getElementById('readerTitle').textContent = data.title;
+      document.getElementById('readerSub').textContent = data.subtitle || '';
+
+      const body = document.getElementById('readerBody');
+      body.innerHTML = `
+        <iframe id="pdfFrame" src="${data.url}"></iframe>
+        <div class="watermark">
+          Licensed Digital Edition<br>Reader: ${data.readerName}
+        </div>
+      `;
+      // Note: the signed URL expires in ~2 minutes. That's intentional —
+      // it's long enough to load the reader, short enough that the link
+      // is useless if copied and shared elsewhere.
+    } catch (e) {
+      showState(`
+        <h2>This Digital Edition is not in your library</h2>
+        <p>${e.message || 'Please purchase access to read this book.'}</p>
+        <a class="btn" href="index.html#shelf">Explore Books</a>
+      `);
+      document.getElementById('readerTitle').textContent = 'Access unavailable';
+    }
+  }
+
+  loadReader();
+</script>
+
+</body>
+</html>
