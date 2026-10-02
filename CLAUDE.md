@@ -12,6 +12,7 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   - `reader.html` — opens a purchased book via a short-lived signed URL
   - `admin.html` — admin tools
   - `author-story.html`, `why-books.html` — content pages
+  - `404.html` — not-found page (Netlify serves it automatically; use root-relative links)
 - `auth.js` — shared Supabase client + helpers (`akGetSession`, `akSignIn`,
   `akSignUp`, `akSignOut`, `akCallFunction`). Load it after the Supabase CDN script.
 - `netlify/functions/` — serverless functions (Node, CommonJS):
