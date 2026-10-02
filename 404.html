@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Page Not Found — Avinash Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite: #15171B;
+    --bone: #E8E3D8;
+    --bone-dim: #A6A296;
+    --ghost-teal: #4FA39B;
+    --line: rgba(232,227,216,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center;
+    background:var(--graphite); color:var(--bone);
+    font-family:'Work Sans', sans-serif; font-size:16px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px; width:100%; margin:0 auto; padding:72px 24px;}
+  h1{font-family:'Newsreader', serif; font-weight:400; font-style:italic; font-size:clamp(32px,5vw,48px); line-height:1.15; margin:0;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--bone-dim);
+    display:inline-flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:16px;height:1px;background:var(--bone-dim);display:inline-block;}
+  .lede{font-family:'Newsreader', serif; font-size:22px; font-style:italic; color:var(--bone-dim); margin:24px 0 40px;}
+  .actions{display:flex; flex-wrap:wrap; gap:16px; border-top:1px solid var(--line); padding-top:36px;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; text-decoration:none; color:var(--bone);
+    border:1px solid var(--line); padding:12px 20px; border-radius:2px;
+    display:inline-block; transition:border-color .2s, color .2s;
+  }
+  .btn:hover{border-color:var(--ghost-teal); color:var(--ghost-teal);}
+  @media (max-width:600px){
+    .wrap{padding:48px 24px;}
+    .lede{font-size:19px;}
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+  <span class="eyebrow">404 — Page Not Found</span>
+  <h1>This page seems to have slipped off the shelf.</h1>
+  <p class="lede">The page you were looking for doesn't exist, or it has moved somewhere else.</p>
+  <div class="actions">
+    <a class="btn" href="/index.html">← Back to home</a>
+    <a class="btn" href="/index.html#shelf">Browse the books →</a>
+    <a class="btn" href="/my-library.html">My Library →</a>
+  </div>
+</main>
+
+</body>
+</html>
