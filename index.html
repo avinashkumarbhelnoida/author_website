@@ -45,6 +45,7 @@
 
   /* ---------- glitch / double-vision text ---------- */
   .glitch{position:relative; display:inline-block; color:var(--bone);}
+  .hero h1{transition:opacity .35s ease;}
   .glitch::before,.glitch::after{
     content:attr(data-text);
     position:absolute; top:0; left:0; width:100%; height:100%;
@@ -309,6 +310,7 @@
   @media (prefers-reduced-motion: reduce){
     .glitch::before,.glitch::after{animation:none;}
     .book-card{transition:none;}
+    .hero h1{transition:none;}
   }
 </style>
 </head>
@@ -349,7 +351,7 @@
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow"><span>The Psychology of Human Mind<br>is a different ball game</span></span>
-      <h1>What you remember<br>is not what <span class="glitch" data-text="happened.">happened.</span></h1>
+      <h1 id="heroHeadline">What you remember<br>is not what <span class="glitch" data-text="happened.">happened.</span></h1>
       <p class="lede">Literary thrillers, conceptual thrillers, novels, self-help, and mysteries about the unreliable machinery of the mind — the invisible meshwork of deep-rooted psychological traits, memory that edits itself, perception that lies convincingly, and the quiet forces that decide who you think you are.</p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#shelf">Explore the books</a>
@@ -777,6 +779,78 @@
     });
   }
 })();
+</script>
+
+<script>
+  // ---- Rotating hero headline, same glitch effect on the key word each time ----
+  const heroHeadlines = [
+    // Psychological Thriller
+    { pre: 'What you remember<br>is not what ', word: 'happened.' },
+    { pre: 'The story you tell yourself<br>is rarely the ', word: 'truth.' },
+    // Conceptual Thriller / Mystery
+    { pre: 'Reality is only half<br>of what you ', word: 'perceive.' },
+    { pre: 'The mind sees first.<br>The eyes just ', word: 'follow.' },
+    // Self-Help
+    { pre: "You already have the answers.<br>You just haven't asked the right ", word: 'questions.' },
+    { pre: "Growth isn't found.<br>It's ", word: 'chosen.' },
+    // Relationships
+    { pre: 'Love is not complicated,<br>we ', word: 'are.' },
+    { pre: 'Every relationship runs on<br>a psychology you never ', word: 'noticed.' },
+    // Science
+    { pre: 'Reality is not always<br>what it ', word: 'appears to be.' },
+    { pre: 'Illusions are nothing<br>but alternate ', word: 'realities.' },
+    // Memory / Identity (thriller-adjacent, ties the whole site together)
+    { pre: 'The past never leaves.<br>It just gets ', word: 'rewritten.' },
+    { pre: 'You are not who you think.<br>You are what you ', word: 'forgot.' },
+    { pre: 'Not every monster wears a mask,<br>some wear ', word: 'memories.' },
+    // Mythology
+    { pre: 'The gods, the monsters,<br>and their deep-embedded ', word: 'psychologies.' },
+    { pre: 'The Vedic Psychology<br>for a Modern ', word: 'Mind.' }
+  ];
+
+  (function () {
+    const heroEl = document.getElementById('heroHeadline');
+    if (!heroEl) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return; // leave the original static headline in place
+
+    let heroIndex = 1; // index 0 is already shown in the HTML on page load
+
+    function renderHero(item) {
+      heroEl.innerHTML = `${item.pre}<span class="glitch" data-text="${item.word}">${item.word}</span>`;
+    }
+
+    // Headlines wrap to different line counts; reserve the tallest one's
+    // height so the text and buttons below don't jump on every swap.
+    function reserveHeroHeight() {
+      const current = heroEl.innerHTML;
+      heroEl.style.minHeight = '';
+      let tallest = 0;
+      heroHeadlines.forEach((item) => {
+        renderHero(item);
+        tallest = Math.max(tallest, heroEl.offsetHeight);
+      });
+      heroEl.innerHTML = current;
+      heroEl.style.minHeight = tallest + 'px';
+    }
+    reserveHeroHeight();
+    if (document.fonts) document.fonts.ready.then(reserveHeroHeight);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(reserveHeroHeight, 150);
+    });
+
+    setInterval(() => {
+      heroEl.style.opacity = 0;
+      setTimeout(() => {
+        renderHero(heroHeadlines[heroIndex]);
+        heroEl.style.opacity = 1;
+        heroIndex = (heroIndex + 1) % heroHeadlines.length;
+      }, 350); // matches the CSS fade duration
+    }, 4000);
+  })();
 </script>
 
 </body>
