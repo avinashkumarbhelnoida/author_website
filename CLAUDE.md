@@ -12,6 +12,8 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   - `reader.html` — opens a purchased book via a short-lived signed URL
   - `admin.html` — admin tools
   - `author-story.html`, `why-books.html` — content pages
+  - `journal-<door>.html` — the six Journal "doors" (consciousness, dreams-intuition, perception-reality,
+    memory-emotion, coincidence, human-behaviour), linked from the home page's Journal section
   - `404.html` — not-found page (Netlify serves it automatically; use root-relative links)
   - `checkout.html` — cart checkout: sign in, then one Razorpay payment for every book in the cart
 - `auth.js` — shared Supabase client + helpers (`akGetSession`, `akSignIn`,
@@ -32,6 +34,8 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   prices are always re-read from `books_catalog` by `create-order`.
 - `images/logo/` — AK monogram: nav mark (`logo-128.png`) and favicons linked from every page.
 - `images/` — `author/` and `books/` covers, each in `.avif`, `.webp` and `.jpg`.
+  Back covers (`<book>-back-<width>.*`) are cropped from the wraparound `<book>-700.jpg`; the hero shows
+  front + back of the book matching each tagline (`heroBooks` / `book:` in `index.html`).
 - `netlify.toml` — publish dir is `.`, functions dir is `netlify/functions`;
   `/digital-books/*` is blocked.
 

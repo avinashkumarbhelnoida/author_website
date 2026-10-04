@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perception &amp; Reality — The Journal — Avinash Kumar</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/logo/logo-192.png">
+<link rel="apple-touch-icon" href="/images/logo/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite: #15171B;
+    --graphite-2: #1D2025;
+    --bone: #E8E3D8;
+    --bone-dim: #A6A296;
+    --ghost-teal: #4FA39B;
+    --ghost-rose: #C4586B;
+    --line: rgba(232,227,216,0.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--graphite); color:var(--bone);
+    font-family:'Work Sans', sans-serif; font-size:16px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
+  a{color:var(--ghost-teal);}
+  h1,h2{font-family:'Newsreader', serif; font-weight:400; margin:0;}
+
+  header{padding:72px 0 40px; border-bottom:1px solid var(--line);}
+  .back-link{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--bone-dim); text-decoration:none;
+    display:flex; width:fit-content; align-items:center; gap:8px; margin-bottom:28px;
+  }
+  .back-link:hover{color:var(--ghost-teal);}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--bone-dim);
+    display:inline-flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:"";width:16px;height:1px;background:var(--bone-dim);display:inline-block;}
+  h1{font-size:clamp(32px,5vw,48px); font-style:italic; line-height:1.15;}
+  .byline{color:var(--bone-dim); font-size:14px; margin-top:18px;}
+
+  article{padding:56px 0 100px; font-size:18px;}
+  article p{margin:0 0 26px; color:var(--bone);}
+  article p.lede{font-family:'Newsreader', serif; font-size:22px; font-style:italic; color:var(--bone-dim);}
+  article p.solo{margin-bottom:6px;}
+  .entry{border:1px solid var(--line); padding:24px 26px; margin:0 0 18px;}
+  .entry .tag{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ghost-teal);}
+  .entry h2{font-size:22px; font-style:italic; margin:8px 0 10px; line-height:1.3;}
+  .entry p{font-size:16px; color:var(--bone-dim); margin:0 0 10px; line-height:1.7;}
+  .entry .soon{font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--bone-dim); opacity:.7;}
+  .more-head{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--bone-dim); margin:40px 0 18px;}
+  .others{font-size:14px; color:var(--bone-dim);}
+  .others a{margin-right:14px;}
+
+  footer{border-top:1px solid var(--line); padding:36px 0 60px;}
+  .footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; text-decoration:none; color:var(--bone);
+    border:1px solid var(--line); padding:12px 20px; border-radius:2px;
+    display:inline-block; transition:border-color .2s, color .2s;
+  }
+  .btn:hover{border-color:var(--ghost-teal); color:var(--ghost-teal);}
+
+  @media (max-width:600px){
+    header{padding:48px 0 32px;}
+    article{padding:40px 0 72px; font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back-link" href="index.html#journal">← Back to The Journal</a>
+    <span class="eyebrow">The Journal</span>
+    <h1>Perception &amp; Reality</h1>
+    <p class="byline">How confidently the brain fills in what it never actually saw.</p>
+  </div>
+</header>
+
+<article>
+  <div class="wrap">
+    <div class="entry">
+      <span class="tag">Latest</span>
+      <h2>Do You See the World, or Your Brain’s Best Guess of It?</h2>
+      <span class="soon">Coming soon</span>
+    </div>
+
+    <div class="more-head">More from this door</div>
+    <div class="entry">
+      <h2>The Blind Spot Your Eyes Hide From You</h2>
+      <p>Each of your eyes has a patch where the retina cannot see at all. Yet you have never noticed a hole in your vision. Your brain quietly paints over it with a guess and does not tell you. If it can hide a gap that big, what else is it smoothing over right now?</p>
+      <span class="soon">Coming soon</span>
+    </div>
+    <div class="entry">
+      <h2>Why Two Witnesses Can Swear to Two Different Truths</h2>
+      <p>Two people stand at the same corner and describe the same event differently. Both are sincere. Neither is lying. Attention, expectation, and memory reshape what was seen long before it is recalled. So when someone is certain, how much of that certainty is evidence?</p>
+      <span class="soon">Coming soon</span>
+    </div>
+    <div class="entry">
+      <h2>Is the Colour You See the Colour I See?</h2>
+      <p>We both call the sky blue. But no one can step inside another mind to check whether your blue looks like mine. We agree on the word, never on the experience. It is a small question that quietly shows how alone every mind really is.</p>
+      <span class="soon">Coming soon</span>
+    </div>
+    <div class="entry">
+      <h2>How Much of What You’re Seeing Right Now Is a Guess?</h2>
+      <p>Your eyes send the brain rough, incomplete signals. It fills in the rest from expectation and past experience, so smoothly that you call the result “reality”. Much of what you see is prediction. Seeing, it turns out, is closer to educated storytelling.</p>
+      <span class="soon">Coming soon</span>
+    </div>
+    <div class="entry">
+      <h2>Why Do We See Faces in Clouds, Walls, and Shadows?</h2>
+      <p>A power socket looks like a startled face. Two knots in a tree look like eyes. The brain is so tuned to spot faces that it finds them where none exist. The habit probably helped us survive. It also shows how readily the mind finds meaning, whether it is there or not.</p>
+      <span class="soon">Coming soon</span>
+    </div>
+
+    <p class="others" style="margin-top:36px;">Other doors: <a href="journal-consciousness.html">Consciousness</a> <a href="journal-dreams-intuition.html">Dreams &amp; Intuition</a> <a href="journal-memory-emotion.html">Memory &amp; Emotion</a> <a href="journal-coincidence.html">Coincidence</a> <a href="journal-human-behaviour.html">Human Behaviour</a></p>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap footer-row">
+    <a class="btn" href="index.html#journal">All six doors →</a>
+    <a class="btn" href="index.html#shelf">Browse the books →</a>
+  </div>
+</footer>
+
+</body>
+</html>
