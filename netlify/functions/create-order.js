@@ -1,22 +1,29 @@
 // netlify/functions/create-order.js
 //
-// Called by the browser when the user clicks "BUY DIGITAL EDITION".
-// The browser sends only a book slug + the user's Supabase access token.
+// Called by the browser when the user clicks "BUY DIGITAL EDITION" on a book
+// page, or "Pay" on the cart checkout page.
+// The browser sends only book slug(s) + the user's Supabase access token.
 // This function:
 //   1. Verifies the user is actually logged in (validates the JWT)
-//   2. Looks up the REAL price from the database (never trusts the client)
-//   3. Asks Razorpay to create an order
-//   4. Records a 'created' purchase row
-//   5. Returns just enough info for Razorpay Checkout to open in the browser
+//   2. Looks up the REAL prices from the database (never trusts the client)
+//   3. Refuses books already in the user's library (no double charging)
+//   4. Asks Razorpay to create ONE order for the total
+//   5. Records one 'created' purchase row per book, all on that order
+//   6. Returns just enough info for Razorpay Checkout to open in the browser
+//
+// Body: { bookSlugs: ['invisible-threads', ...], currency: 'INR' | 'USD' }
+//   (the older { bookSlug: 'invisible-threads' } form is still accepted)
 //
 // Required environment variables (set in Netlify -> Site settings -> Environment):
 //   SUPABASE_URL
 //   SUPABASE_ANON_KEY           (public — used only to validate the user's JWT)
-//   SUPABASE_SERVICE_ROLE_KEY   (secret — used to write the purchase row, bypassing RLS)
+//   SUPABASE_SERVICE_ROLE_KEY   (secret — used to write the purchase rows, bypassing RLS)
 //   RAZORPAY_KEY_ID             (public — also returned to the frontend for Checkout)
 //   RAZORPAY_KEY_SECRET         (secret — never leaves this function)
 
 const { createClient } = require('@supabase/supabase-js');
+
+const MAX_BOOKS_PER_ORDER = 20;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -24,19 +31,21 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { bookSlug, currency } = JSON.parse(event.body || '{}');
+    const { bookSlugs, bookSlug, currency } = JSON.parse(event.body || '{}');
     const authHeader = event.headers.authorization || event.headers.Authorization;
     const token = authHeader && authHeader.replace('Bearer ', '');
 
     if (!token) {
       return { statusCode: 401, body: JSON.stringify({ error: 'Not logged in.' }) };
     }
-    if (!bookSlug) {
-      return { statusCode: 400, body: JSON.stringify({ error: 'bookSlug is required.' }) };
+
+    const slugs = [...new Set((Array.isArray(bookSlugs) ? bookSlugs : [bookSlug])
+      .filter((s) => typeof s === 'string' && s))];
+    if (!slugs.length || slugs.length > MAX_BOOKS_PER_ORDER) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'Please choose at least one book.' }) };
     }
 
-    // 1. Validate the user's session using the ANON key (safe — this only
-    //    checks "is this a real, current Supabase session", it can't write anything)
+    // 1. Validate the user's session
     const anonClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
     const { data: userData, error: userErr } = await anonClient.auth.getUser(token);
     if (userErr || !userData?.user) {
@@ -44,26 +53,48 @@ exports.handler = async (event) => {
     }
     const user = userData.user;
 
-    // 2. Look up the REAL price server-side. The browser's opinion of the
-    //    price is never used for anything.
     const serviceClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-    const { data: book, error: bookErr } = await serviceClient
-      .from('books_catalog')
-      .select('id, price_inr, price_usd, status')
-      .eq('slug', bookSlug)
-      .single();
 
-    if (bookErr || !book || book.status !== 'active') {
-      return { statusCode: 404, body: JSON.stringify({ error: 'Book not found or not for sale.' }) };
+    // 2. Real prices from the database
+    const { data: books, error: bookErr } = await serviceClient
+      .from('books_catalog')
+      .select('id, slug, title, subtitle, price_inr, price_usd, status')
+      .in('slug', slugs);
+
+    const forSale = (books || []).filter((b) => b.status === 'active');
+    if (bookErr || forSale.length !== slugs.length) {
+      return { statusCode: 404, body: JSON.stringify({ error: 'One or more books are not for sale.' }) };
+    }
+
+    // 3. Don't charge for books the reader already owns
+    const { data: owned, error: ownedErr } = await serviceClient
+      .from('library')
+      .select('book_id')
+      .eq('user_id', user.id)
+      .eq('access_status', 'active')
+      .in('book_id', forSale.map((b) => b.id));
+    if (ownedErr) {
+      console.error('Failed to check library:', ownedErr);
+      return { statusCode: 500, body: JSON.stringify({ error: 'Could not start checkout. Please try again.' }) };
+    }
+    if (owned && owned.length) {
+      const ownedIds = new Set(owned.map((o) => o.book_id));
+      const titles = forSale.filter((b) => ownedIds.has(b.id)).map((b) => b.subtitle || b.title);
+      return {
+        statusCode: 409,
+        body: JSON.stringify({ error: `Already in your library: ${titles.join(', ')}. Remove it from your cart to continue.` }),
+      };
     }
 
     const useINR = (currency || 'INR').toUpperCase() !== 'USD';
-    const amount = useINR ? book.price_inr : book.price_usd;
     const currencyCode = useINR ? 'INR' : 'USD';
-    // Razorpay wants the amount in the smallest currency unit (paise / cents)
-    const amountInSmallestUnit = Math.round(amount * 100);
+    const lines = forSale.map((b) => {
+      const amount = Number(useINR ? b.price_inr : b.price_usd);
+      return { book: b, amount, smallest: Math.round(amount * 100) };
+    });
+    const amountInSmallestUnit = lines.reduce((sum, l) => sum + l.smallest, 0);
 
-    // 3. Ask Razorpay to create an order (server-to-server, Basic Auth with key:secret)
+    // 4. Create the Razorpay order (server-to-server, using the secret)
     const rpAuth = Buffer.from(
       `${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`
     ).toString('base64');
@@ -77,7 +108,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         amount: amountInSmallestUnit,
         currency: currencyCode,
-        notes: { book_id: book.id, user_id: user.id, book_slug: bookSlug },
+        notes: { user_id: user.id, book_slugs: slugs.join(',').slice(0, 250) },
       }),
     });
 
@@ -86,30 +117,32 @@ exports.handler = async (event) => {
       console.error('Razorpay order creation failed:', errText);
       return { statusCode: 502, body: JSON.stringify({ error: 'Could not start checkout. Please try again.' }) };
     }
+
     const rpOrder = await rpRes.json();
 
-    // 4. Record a 'created' purchase row (service_role — bypasses RLS by design;
-    //    this is the ONE place allowed to write purchases on the user's behalf)
-    const { data: purchase, error: insertErr } = await serviceClient
+    // 5. One 'created' purchase row per book, all tied to this order
+    const { data: purchases, error: insertErr } = await serviceClient
       .from('purchases')
-      .insert({
+      .insert(lines.map((l) => ({
         user_id: user.id,
-        book_id: book.id,
+        book_id: l.book.id,
         razorpay_order_id: rpOrder.id,
-        amount,
+        amount: l.amount,
         currency: currencyCode,
         payment_status: 'created',
-      })
-      .select()
-      .single();
+      })))
+      .select('id');
 
     if (insertErr) {
       console.error('Failed to record purchase:', insertErr);
       return { statusCode: 500, body: JSON.stringify({ error: 'Could not start checkout. Please try again.' }) };
     }
 
-    // 5. Return only what Razorpay Checkout needs in the browser.
-    //    RAZORPAY_KEY_SECRET never leaves this function.
+    const description = lines.length === 1
+      ? [lines[0].book.title, lines[0].book.subtitle].filter(Boolean).join(' — ')
+      : `${lines.length} Digital Editions`;
+
+    // 6. Hand back only what Checkout needs
     return {
       statusCode: 200,
       body: JSON.stringify({
@@ -117,8 +150,8 @@ exports.handler = async (event) => {
         amount: amountInSmallestUnit,
         currency: currencyCode,
         razorpayKeyId: process.env.RAZORPAY_KEY_ID,
-        purchaseId: purchase.id,
-        bookTitle: 'THE MIND FILES — VOL-I: INVISIBLE THREADS',
+        purchaseId: purchases[0].id,
+        bookTitle: description,
       }),
     };
   } catch (err) {
