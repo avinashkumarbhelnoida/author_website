@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avinash Kumar — Author</title>
+<link rel="icon" type="image/png" sizes="32x32" href="images/logo/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/logo/logo-192.png">
+<link rel="apple-touch-icon" href="images/logo/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -45,7 +48,8 @@
 
   /* ---------- glitch / double-vision text ---------- */
   .glitch{position:relative; display:inline-block; color:var(--bone);}
-  .hero h1{transition:opacity .35s ease;}
+  .hero h1{transition:opacity 1.2s ease, filter 1.2s ease, transform 1.2s ease;}
+  .hero h1.is-swapping{opacity:0; filter:blur(6px); transform:translateY(6px);}
   .glitch::before,.glitch::after{
     content:attr(data-text);
     position:absolute; top:0; left:0; width:100%; height:100%;
@@ -59,14 +63,15 @@
   /* ---------- nav ---------- */
   nav{position:sticky; top:0; z-index:20; background:rgba(21,23,27,0.86); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px;}
-  .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic;}
+  .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic; display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--bone);}
+  .brand-mark{width:34px; height:34px; display:block;}
   .navlinks{display:flex; gap:22px; font-size:13.5px; white-space:nowrap;}
   .navlinks a{text-decoration:none; color:var(--bone-dim); transition:color .15s;}
   .navlinks a:hover{color:var(--bone);}
   a:focus-visible, button:focus-visible{outline:1px solid var(--ghost-teal); outline-offset:4px;}
 
   /* ---------- hero ---------- */
-  .hero{padding:110px 0 90px; position:relative; overflow:hidden;}
+  .hero{padding:44px 0 90px; position:relative; overflow:hidden;}
   .hero::before{
     content:"";
     position:absolute; inset:0;
@@ -74,7 +79,7 @@
                       radial-gradient(circle at 15% 75%, rgba(196,88,107,0.09), transparent 40%);
     pointer-events:none;
   }
-  .hero-grid{display:grid; grid-template-columns:1.1fr 0.7fr; gap:60px; align-items:center; position:relative;}
+  .hero-grid{display:grid; grid-template-columns:1.35fr 0.65fr; gap:60px; align-items:center; position:relative;}
   .hero h1{font-size:clamp(36px,4.6vw,56px); line-height:1.14; letter-spacing:-0.01em; margin:22px 0 26px;}
   .hero p.lede{font-size:17.5px; color:var(--bone-dim); max-width:48ch; margin:0 0 34px;}
   .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
@@ -113,9 +118,19 @@
   .portrait::after{content:"";position:absolute; inset:0; border:1px solid var(--ghost-teal); transform:translate(-5px,4px); opacity:.5;}
   .author h2{font-size:24px; font-style:italic; margin-bottom:10px;}
   .author p{color:var(--bone-dim); max-width:58ch; margin:0;}
-  .stats{display:flex; flex-direction:column; gap:16px; font-family:'IBM Plex Mono', monospace;}
-  .stat b{display:block; font-family:'Newsreader', serif; font-size:24px; color:var(--bone); font-weight:500;}
-  .stat span{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--bone-dim);}
+  .author-links{display:flex; flex-direction:column; gap:22px; min-width:210px;}
+  .author-tabs{display:flex; flex-direction:column; gap:10px;}
+  .author-tab{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+    text-decoration:none; color:var(--bone); border:1px solid var(--line); padding:11px 16px;
+    display:flex; justify-content:space-between; align-items:center; gap:14px; transition:border-color .18s ease, color .18s ease;
+  }
+  .author-tab:hover{border-color:var(--ghost-teal); color:var(--ghost-teal);}
+  .find-me-label{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--bone-dim); display:block; margin-bottom:10px;}
+  .social{display:flex; gap:12px;}
+  .social a{width:40px; height:40px; border:1px solid var(--line); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; color:var(--bone-dim); transition:color .18s ease, border-color .18s ease;}
+  .social a:hover{color:var(--ghost-teal); border-color:var(--ghost-teal);}
+  .social svg{width:18px; height:18px;}
 
   /* ---------- featured work ---------- */
   .featured{background:var(--graphite-2); padding:100px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
@@ -192,6 +207,7 @@
   .cart-foot{padding:20px 22px 26px; border-top:1px solid var(--line);}
   .cart-total{display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:13.5px; margin-bottom:16px;}
   .cart-foot .btn{width:100%; justify-content:center; text-align:center; display:block;}
+  .cart-foot .btn.is-disabled{opacity:.45; pointer-events:none;}
 
   /* ---------- on the shelf ---------- */
   .shelf{padding:100px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--graphite-2);}
@@ -275,6 +291,11 @@
   form button{font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-transform:uppercase; background:var(--bone); color:var(--graphite); border:none; padding:10px 20px; cursor:pointer; letter-spacing:.04em;}
   form button:hover{background:var(--ghost-teal); color:var(--graphite);}
   .signup-note{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--bone-dim); margin-top:14px;}
+  .contact-line{display:flex; align-items:center; max-width:440px; margin:0 auto; border-bottom:1px dashed var(--bone-dim); padding-bottom:14px; gap:12px;}
+  .contact-email{flex:1; text-align:left; font-family:'IBM Plex Mono', monospace; font-size:14px; padding:10px 4px; color:var(--bone); text-decoration:none; overflow-wrap:anywhere;}
+  .contact-email:hover{color:var(--ghost-teal);}
+  .contact-send{font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-transform:uppercase; background:var(--bone); color:var(--graphite); padding:10px 20px; letter-spacing:.04em; text-decoration:none;}
+  .contact-send:hover{background:var(--ghost-teal);}
 
   /* ---------- footer ---------- */
   footer{padding:36px 0;}
@@ -288,10 +309,16 @@
   }
 
   @media (max-width:860px){
+    .hero{padding-top:32px;}
     .hero-grid{grid-template-columns:1fr; gap:44px;}
     .evidence{height:320px; max-width:360px;}
     .author .wrap{grid-template-columns:1fr; text-align:center;}
-    .stats{flex-direction:row; justify-content:center; flex-wrap:wrap;}
+    .author-links{align-items:center; min-width:0;}
+    .author-tabs{flex-direction:row; flex-wrap:wrap; justify-content:center;}
+    .social{justify-content:center;}
+    .contact-line{flex-direction:column; border-bottom:none; gap:12px;}
+    .contact-email{text-align:center;}
+    .contact-send{width:100%; text-align:center;}
     .portrait{margin:0 auto;}
     .book-grid{grid-template-columns:1fr;}
     .acct-grid{grid-template-columns:1fr;}
@@ -310,7 +337,7 @@
   @media (prefers-reduced-motion: reduce){
     .glitch::before,.glitch::after{animation:none;}
     .book-card{transition:none;}
-    .hero h1{transition:none;}
+    .hero h1, .hero h1.is-swapping{transition:none; filter:none; transform:none;}
   }
 </style>
 </head>
@@ -318,18 +345,28 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand">Avinash Kumar</div>
+    <a class="brand" href="index.html"><img class="brand-mark" src="images/logo/logo-128.png" alt="" width="34" height="34">Avinash Kumar</a>
     <div class="navlinks">
       <a href="why-books.html">Why Books</a>
-      <a href="#featured">Featured Work</a>
-      <a href="#shelf">On the Shelf</a>
-      <a href="#books">Upcoming Works</a>
+      <div class="nav-genre nav-drop">
+        <button class="nav-genre-btn" type="button" aria-expanded="false">My Works <span class="caret">&#9662;</span></button>
+        <div class="nav-genre-menu">
+          <a href="#featured">Featured Work</a>
+          <a href="#shelf">On the Shelf</a>
+          <a href="#books">Upcoming Works</a>
+        </div>
+      </div>
       <a href="#about">About the Author</a>
-      <a href="#journal">Journal</a>
-      <a href="#discussions">Discussions</a>
+      <div class="nav-genre nav-drop">
+        <button class="nav-genre-btn" type="button" aria-expanded="false">Readers Lounge <span class="caret">&#9662;</span></button>
+        <div class="nav-genre-menu">
+          <a href="#journal">Journal</a>
+          <a href="#discussions">Discussions</a>
+        </div>
+      </div>
       <a href="my-library.html">My Library</a>
-      <div class="nav-genre" id="genreWrap">
-        <button class="nav-genre-btn" id="genreBtn" type="button">Genre <span class="caret">&#9662;</span></button>
+      <div class="nav-genre nav-drop" id="genreWrap">
+        <button class="nav-genre-btn" id="genreBtn" type="button" aria-expanded="false">Genre <span class="caret">&#9662;</span></button>
         <div class="nav-genre-menu" id="genreMenu">
           <a href="#shelf" data-genre="all">All Genres</a>
           <a href="#shelf" data-genre="psychological-thriller">Psychological Thriller</a>
@@ -392,7 +429,7 @@
         <a class="btn btn-solid" href="invisible-threads.html">Enter the Mind Files →</a>
       </div>
       <div class="cta-row" style="margin-top:14px;">
-        <button class="btn btn-outline shelf-add-cart" data-title="The Mind Files — Vol-I: Invisible Threads" data-price="9.99">Add to Cart</button>
+        <button class="btn btn-outline shelf-add-cart" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="9.99">Add to Cart</button>
         <a class="btn btn-solid" href="invisible-threads.html#buy">Buy PDF — $9.99 / ₹249</a>
       </div>
           </div>
@@ -421,7 +458,7 @@
         <h3>The Mind Files — Vol-I: Invisible Threads</h3>
         <p class="shelf-genre-tag">Psychological Thriller · Mystery</p>
         <div class="shelf-actions">
-          <button class="btn btn-outline shelf-add-cart" data-title="The Mind Files — Vol-I: Invisible Threads" data-price="9.99">Add to Cart</button>
+          <button class="btn btn-outline shelf-add-cart" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="9.99">Add to Cart</button>
           <a class="btn btn-solid" href="invisible-threads.html#buy">View Book →</a>
         </div>
       </div>
@@ -572,10 +609,20 @@
         <a class="btn btn-outline" href="author-story.html">Read the author's story →</a>
       </div>
     </div>
-    <div class="stats">
-      <div class="stat"><b>3</b><span>Novels</span></div>
-      <div class="stat"><b>14</b><span>Countries in print</span></div>
-      <div class="stat"><b>1</b><span>Ending readers argue about</span></div>
+    <div class="author-links">
+      <div class="author-tabs">
+        <a class="author-tab" href="#journal">The Journal <span aria-hidden="true">→</span></a>
+        <a class="author-tab" href="#discussions">Discussions <span aria-hidden="true">→</span></a>
+        <a class="author-tab" href="#contact">Contact <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="find-me">
+        <span class="find-me-label">Find me on</span>
+        <div class="social">
+          <!-- TODO: replace with your Instagram and Facebook profile URLs -->
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z"/></svg></a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -637,11 +684,11 @@
       <span class="eyebrow" style="justify-content:center;">Contact</span>
       <h2 style="margin-top:16px;">For press, rights, or just to talk about the ending.</h2>
       <p>Send a note directly — press, rights inquiries, and reader mail all reach the same inbox.</p>
-      <form action="https://buttondown.com/api/emails/embed-subscribe/YOUR-BUTTONDOWN-USERNAME" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.com/YOUR-BUTTONDOWN-USERNAME', 'popupwindow')">
-        <input type="email" name="email" placeholder="you@email.com" required>
-        <button type="submit">Send</button>
-      </form>
-      <div class="signup-note">avinash@avinashkumar.com · replies within a few days</div>
+      <div class="contact-line">
+        <a class="contact-email" href="mailto:authoravinashkumar@gmail.com">authoravinashkumar@gmail.com</a>
+        <a class="contact-send" href="mailto:authoravinashkumar@gmail.com?subject=Hello%20Avinash">Send</a>
+      </div>
+      <div class="signup-note">Replies within a few days</div>
     </div>
   </div>
 </section>
@@ -650,9 +697,10 @@
   <div class="wrap">
     <div class="copy">© 2026 Avinash Kumar</div>
     <div class="f-links">
-      <a href="#">Instagram</a>
+      <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a>
       <a href="#">Press kit</a>
-      <a href="#">Contact</a>
+      <a href="#contact">Contact</a>
     </div>
   </div>
 </footer>
@@ -666,7 +714,7 @@
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-foot">
     <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
-    <a class="btn btn-solid" id="cartCheckout" href="#">Checkout</a>
+    <a class="btn btn-solid" id="cartCheckout" href="checkout.html">Checkout →</a>
   </div>
 </div>
 
@@ -676,17 +724,27 @@
   var CART_KEY = 'akCart';
 
   function getCart(){
-    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    // Only items with a slug can be checked out (older carts stored titles only).
+    try { return (JSON.parse(localStorage.getItem(CART_KEY)) || []).filter(function(i){ return i && i.slug; }); }
     catch(e){ return []; }
   }
   function saveCart(items){
-    localStorage.setItem(CART_KEY, JSON.stringify(items));
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch(e){}
     renderCart();
   }
-  function addToCart(title, price){
+  function addToCart(btn){
     var items = getCart();
-    items.push({ title: title, price: parseFloat(price) || 0 });
-    saveCart(items);
+    var slug = btn.getAttribute('data-slug');
+    // A Digital Edition is bought once, so the same book is never added twice.
+    if (!items.some(function(i){ return i.slug === slug; })){
+      items.push({
+        slug: slug,
+        title: btn.getAttribute('data-title'),
+        priceInr: parseFloat(btn.getAttribute('data-price-inr')) || 0,
+        priceUsd: parseFloat(btn.getAttribute('data-price-usd')) || 0
+      });
+      saveCart(items);
+    }
     openCart();
   }
   function removeFromCart(index){
@@ -694,11 +752,15 @@
     items.splice(index, 1);
     saveCart(items);
   }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+  }
   function renderCart(){
     var items = getCart();
     var countEl = document.getElementById('cartCount');
     var listEl = document.getElementById('cartItems');
     var totalEl = document.getElementById('cartTotal');
+    var checkoutEl = document.getElementById('cartCheckout');
     if (countEl) countEl.textContent = items.length;
     if (listEl){
       if (!items.length){
@@ -706,8 +768,8 @@
       } else {
         listEl.innerHTML = items.map(function(item, i){
           return '<div class="cart-item">' +
-            '<div><div class="ci-name">' + item.title + '</div>' +
-            '<div class="ci-price">$' + item.price.toFixed(2) + '</div>' +
+            '<div><div class="ci-name">' + escapeHtml(item.title) + '</div>' +
+            '<div class="ci-price">₹' + item.priceInr + ' · $' + item.priceUsd.toFixed(2) + '</div>' +
             '<button class="ci-remove" data-index="' + i + '">Remove</button></div>' +
           '</div>';
         }).join('');
@@ -719,9 +781,11 @@
       }
     }
     if (totalEl){
-      var total = items.reduce(function(sum, item){ return sum + item.price; }, 0);
-      totalEl.textContent = '$' + total.toFixed(2);
+      var totalInr = items.reduce(function(sum, item){ return sum + item.priceInr; }, 0);
+      var totalUsd = items.reduce(function(sum, item){ return sum + item.priceUsd; }, 0);
+      totalEl.textContent = '₹' + totalInr + ' · $' + totalUsd.toFixed(2);
     }
+    if (checkoutEl) checkoutEl.classList.toggle('is-disabled', !items.length);
   }
 
   function openCart(){
@@ -739,9 +803,9 @@
 
   document.querySelectorAll('.shelf-add-cart').forEach(function(btn){
     btn.addEventListener('click', function(){
-      addToCart(btn.getAttribute('data-title'), btn.getAttribute('data-price'));
+      addToCart(btn);
       var original = btn.textContent;
-      btn.textContent = 'Added ✓';
+      btn.textContent = 'In cart ✓';
       setTimeout(function(){ btn.textContent = original; }, 1400);
     });
   });
@@ -753,13 +817,28 @@
   var genreBtn = document.getElementById('genreBtn');
   var genreMenu = document.getElementById('genreMenu');
 
-  genreBtn.addEventListener('click', function(e){
-    e.stopPropagation();
-    genreWrap.classList.toggle('open');
+  var navDrops = document.querySelectorAll('.nav-drop');
+  function closeNavDrops(except){
+    navDrops.forEach(function(d){
+      if (d === except) return;
+      d.classList.remove('open');
+      d.querySelector('.nav-genre-btn').setAttribute('aria-expanded', 'false');
+    });
+  }
+  navDrops.forEach(function(drop){
+    var btn = drop.querySelector('.nav-genre-btn');
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      closeNavDrops(drop);
+      var open = drop.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    drop.querySelectorAll('.nav-genre-menu a').forEach(function(link){
+      link.addEventListener('click', function(){ closeNavDrops(); });
+    });
   });
-  document.addEventListener('click', function(){
-    genreWrap.classList.remove('open');
-  });
+  document.addEventListener('click', function(){ closeNavDrops(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeNavDrops(); });
 
   genreMenu.querySelectorAll('a').forEach(function(link){
     link.addEventListener('click', function(){
@@ -842,14 +921,17 @@
       resizeTimer = setTimeout(reserveHeroHeight, 150);
     });
 
+    const FADE_MS = 1200;    // matches the CSS transition on .hero h1
+    const CYCLE_MS = 8000;   // each tagline's turn, including its fade in/out
+
     setInterval(() => {
-      heroEl.style.opacity = 0;
+      heroEl.classList.add('is-swapping');
       setTimeout(() => {
         renderHero(heroHeadlines[heroIndex]);
-        heroEl.style.opacity = 1;
+        heroEl.classList.remove('is-swapping');
         heroIndex = (heroIndex + 1) % heroHeadlines.length;
-      }, 350); // matches the CSS fade duration
-    }, 4000);
+      }, FADE_MS);
+    }, CYCLE_MS);
   })();
 </script>
 

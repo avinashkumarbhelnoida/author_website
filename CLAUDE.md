@@ -13,20 +13,30 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   - `admin.html` — admin tools
   - `author-story.html`, `why-books.html` — content pages
   - `404.html` — not-found page (Netlify serves it automatically; use root-relative links)
+  - `checkout.html` — cart checkout: sign in, then one Razorpay payment for every book in the cart
 - `auth.js` — shared Supabase client + helpers (`akGetSession`, `akSignIn`,
   `akSignUp`, `akSignOut`, `akCallFunction`). Load it after the Supabase CDN script.
 - `netlify/functions/` — serverless functions (Node, CommonJS):
-  - `create-order.js` — validates the user, reads the real price from the DB, creates a Razorpay order
-  - `verify-payment.js` — verifies the Razorpay signature, marks the purchase paid, grants library access
+  - `create-order.js` — validates the user, reads real prices from the DB, refuses books already owned,
+    creates ONE Razorpay order for one or more books (`bookSlugs`), one `purchases` row per book
+  - `verify-payment.js` — verifies the Razorpay signature, marks the order's purchases paid, grants library access
+  - `razorpay-webhook.js` — Razorpay's server-to-server `payment.captured` / `order.paid` events; same
+    fulfilment as verify-payment, for buyers who close the tab. Checks `X-Razorpay-Signature` and the amount.
+- `netlify/lib/fulfill.js` — shared "mark paid + add to library" logic (outside `functions/` so it isn't deployed as one)
   - `get-read-url.js` — checks entitlement, returns a 120-second Supabase Storage signed URL
-- `schema.sql` (v1) and `supabase/schema-v2.sql` (v2, current Digital Edition +
-  library system). Run them manually in the Supabase SQL Editor.
+- `schema.sql` (v1), `supabase/schema-v2.sql` (v2, current Digital Edition +
+  library system) and `supabase/schema-v3-security.sql` (admin-only access via
+  `is_admin()` = `profiles.role = 'admin'`; readers can't change their own role).
+  Run them manually in the Supabase SQL Editor.
+- Cart: `localStorage['akCart']` = `[{slug, title, priceInr, priceUsd}]`, display only —
+  prices are always re-read from `books_catalog` by `create-order`.
+- `images/logo/` — AK monogram: nav mark (`logo-128.png`) and favicons linked from every page.
 - `images/` — `author/` and `books/` covers, each in `.avif`, `.webp` and `.jpg`.
 - `netlify.toml` — publish dir is `.`, functions dir is `netlify/functions`;
   `/digital-books/*` is blocked.
 
 ## Security rules (must follow)
-- `SUPABASE_SERVICE_ROLE_KEY` and `RAZORPAY_KEY_SECRET` may only be read inside
+- `SUPABASE_SERVICE_ROLE_KEY`, `RAZORPAY_KEY_SECRET` and `RAZORPAY_WEBHOOK_SECRET` may only be read inside
   `netlify/functions/*.js` via `process.env`. Never put them in any HTML or
   browser JS, and never hard-code them anywhere.
 - The Supabase URL + anon/publishable key in `auth.js` and `RAZORPAY_KEY_ID` are
@@ -40,7 +50,8 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
 - Images: name as `<book-slug>-<width>.{avif,webp,jpg}` and use a `<picture>`
   with avif + webp sources and a jpg `<img>` fallback, with `width`, `height`,
   `alt`, and `loading="lazy"` (use `eager` only for above-the-fold images).
-- Keep page titles in the form `<Page> — Avinash Kumar`.
+- Keep page titles in the form `<Page> — Avinash Kumar`, and include the favicon `<link>`s from `index.html`.
+- Admin rights come from `profiles.role = 'admin'`, never from just being signed in.
 - Keep pages mobile-friendly; check layouts at phone width.
 - Match the existing plain HTML/CSS/vanilla JS style. Don't add frameworks or a
   build step unless asked.
