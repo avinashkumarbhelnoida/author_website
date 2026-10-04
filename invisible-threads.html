@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invisible Threads — The Mind Files, Vol-I | Avinash Kumar</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/logo/logo-192.png">
+<link rel="apple-touch-icon" href="/images/logo/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -215,7 +218,7 @@
         </div>
         <p class="de-note">Read online through your private library.</p>
         <button class="btn primary" id="buyDigitalBtn" data-book-slug="invisible-threads">Buy Digital Edition</button>
-        <button class="btn" id="addToCartBtn" data-title="The Mind Files — Vol-I: Invisible Threads" data-price="9.99">Add to Cart</button>
+        <button class="btn" id="addToCartBtn" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="9.99">Add to Cart</button>
       </div>
     </div>
     <p class="avail-note">Available on Amazon.in, Amazon.com &amp; as a Digital Edition in your private library</p>
@@ -443,11 +446,20 @@
 
   // Cart stays client-side/UI-only — never authoritative for price or payment.
   document.getElementById('addToCartBtn').addEventListener('click', function () {
-    const cart = JSON.parse(localStorage.getItem('akCart') || '[]');
-    cart.push({ title: this.dataset.title, price: this.dataset.price });
-    localStorage.setItem('akCart', JSON.stringify(cart));
-    this.textContent = 'Added ✓';
-    setTimeout(() => { this.textContent = 'Add to Cart'; }, 1500);
+    let cart = [];
+    try { cart = (JSON.parse(localStorage.getItem('akCart')) || []).filter(i => i && i.slug); } catch (e) {}
+    if (!cart.some(i => i.slug === this.dataset.slug)) {
+      cart.push({
+        slug: this.dataset.slug,
+        title: this.dataset.title,
+        priceInr: parseFloat(this.dataset.priceInr) || 0,
+        priceUsd: parseFloat(this.dataset.priceUsd) || 0,
+      });
+    }
+    if (this.dataset.inCart) { window.location.href = 'checkout.html'; return; }
+    try { localStorage.setItem('akCart', JSON.stringify(cart)); } catch (e) {}
+    this.dataset.inCart = '1';
+    this.textContent = 'In cart · Checkout →';
   });
 
   akRefreshAuthStatus();

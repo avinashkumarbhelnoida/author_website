@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Checkout — Avinash Kumar</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/logo/logo-192.png">
+<link rel="apple-touch-icon" href="/images/logo/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root{
+    --graphite: #15171B;
+    --graphite-2: #1D2025;
+    --bone: #E8E3D8;
+    --bone-dim: #A6A296;
+    --ghost-teal: #4FA39B;
+    --ghost-rose: #C4586B;
+    --line: rgba(232,227,216,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--graphite); color:var(--bone);
+    font-family:'Work Sans', sans-serif; font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:0 24px;}
+  a{color:var(--ghost-teal);}
+  h1,h2{font-family:'Newsreader', serif; font-weight:400; margin:0;}
+  header{padding:56px 0 28px;}
+  .back-link{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--bone-dim); text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:24px;
+  }
+  .back-link:hover{color:var(--ghost-teal);}
+  h1{font-size:clamp(30px,5vw,42px); font-style:italic;}
+  .panel{background:var(--graphite-2); border:1px solid var(--line); padding:24px; margin-bottom:24px;}
+  .panel h2{font-size:20px; font-style:italic; margin-bottom:14px;}
+  .item{display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .item:first-child{padding-top:0;}
+  .item-name{font-size:15px;}
+  .item-sub{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim); letter-spacing:.04em; margin-top:2px;}
+  .item-price{font-family:'IBM Plex Mono', monospace; font-size:14px; white-space:nowrap; text-align:right;}
+  .item-remove{background:none; border:none; color:var(--bone-dim); cursor:pointer; font-size:12px; text-decoration:underline; padding:0; margin-top:6px;}
+  .item-remove:hover{color:var(--ghost-rose);}
+  .total{display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:15px; padding-top:16px;}
+  .note{font-size:13px; color:var(--bone-dim); margin:12px 0 0;}
+  .empty{color:var(--bone-dim); text-align:center; padding:12px 0;}
+  label{display:block; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--bone-dim); margin:14px 0 6px;}
+  input{width:100%; background:var(--graphite); border:1px solid var(--line); color:var(--bone); padding:11px 12px; font-size:15px; font-family:inherit; border-radius:2px;}
+  input:focus{outline:1px solid var(--ghost-teal); border-color:var(--ghost-teal);}
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+    padding:14px 22px; border-radius:2px; border:1px solid var(--bone); cursor:pointer;
+    background:var(--bone); color:var(--graphite); width:100%; margin-top:18px; transition:all .18s ease;
+  }
+  .btn:hover:not([disabled]){background:transparent; color:var(--bone);}
+  .btn[disabled]{opacity:.5; cursor:not-allowed;}
+  .link-btn{background:none; border:none; color:var(--ghost-teal); cursor:pointer; padding:0; font-size:13px; margin-top:14px; text-decoration:underline;}
+  .error{color:var(--ghost-rose); font-size:13.5px; margin-top:12px; min-height:1em;}
+  .signed-in{font-size:14px; color:var(--bone-dim);}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back-link" href="index.html#shelf">← Continue browsing</a>
+    <h1>Checkout</h1>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel">
+    <h2>Your cart</h2>
+    <div id="items"></div>
+    <div class="total hidden" id="totalRow"><span>Total</span><span id="total"></span></div>
+    <p class="note hidden" id="totalNote">Digital Editions are read online in your private library. Payment is taken in ₹ through Razorpay.</p>
+  </section>
+
+  <section class="panel hidden" id="accountPanel">
+    <h2 id="accountTitle">Sign in to pay</h2>
+    <div id="authForm">
+      <div id="nameField" class="hidden">
+        <label for="name">Name</label>
+        <input id="name" autocomplete="name">
+      </div>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email">
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password">
+      <button class="btn" id="authBtn" type="button">Sign in</button>
+      <button class="link-btn" id="toggleBtn" type="button">New here? Create an account</button>
+    </div>
+    <p class="signed-in hidden" id="signedIn"></p>
+    <div class="error" id="authError"></div>
+  </section>
+
+  <button class="btn hidden" id="payBtn" type="button">Pay</button>
+  <div class="error" id="payError"></div>
+</main>
+
+<script>
+  // Cart lives in localStorage (shared with index.html). It only lists what
+  // the reader wants — prices are always re-read from the database by
+  // create-order, so editing localStorage can't change what anyone pays.
+  const CART_KEY = 'akCart';
+  let mode = 'signin';
+
+  function getCart(){
+    try { return (JSON.parse(localStorage.getItem(CART_KEY)) || []).filter(i => i && i.slug); }
+    catch (e) { return []; }
+  }
+  function setCart(items){
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) {}
+  }
+  function inr(n){ return '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 }); }
+  function usd(n){ return '$' + Number(n || 0).toFixed(2); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function renderCart(){
+    const items = getCart();
+    const list = document.getElementById('items');
+    const empty = !items.length;
+    ['totalRow', 'totalNote', 'accountPanel', 'payBtn'].forEach(id =>
+      document.getElementById(id).classList.toggle('hidden', empty));
+    if (empty) {
+      list.innerHTML = '<div class="empty">Your cart is empty. <a href="index.html#shelf">Browse the shelf →</a></div>';
+      return;
+    }
+    list.innerHTML = items.map((item, i) => `
+      <div class="item">
+        <div>
+          <div class="item-name">${esc(item.title)}</div>
+          <div class="item-sub">Digital Edition</div>
+          <button class="item-remove" data-index="${i}" type="button">Remove</button>
+        </div>
+        <div class="item-price">${inr(item.priceInr)}<div class="item-sub">${usd(item.priceUsd)} intl.</div></div>
+      </div>`).join('');
+    list.querySelectorAll('.item-remove').forEach(btn => btn.addEventListener('click', () => {
+      const next = getCart(); next.splice(Number(btn.dataset.index), 1); setCart(next); renderCart();
+    }));
+    const total = items.reduce((s, i) => s + Number(i.priceInr || 0), 0);
+    document.getElementById('total').textContent = inr(total);
+    document.getElementById('payBtn').textContent = 'Pay ' + inr(total);
+  }
+
+  async function renderAccount(){
+    const session = await akGetSession();
+    document.getElementById('authForm').classList.toggle('hidden', !!session);
+    document.getElementById('accountTitle').textContent = session ? 'Your account' : (mode === 'signup' ? 'Create your account' : 'Sign in to pay');
+    const signedIn = document.getElementById('signedIn');
+    signedIn.classList.toggle('hidden', !session);
+    if (session) {
+      const name = session.user.user_metadata?.name || session.user.email;
+      signedIn.innerHTML = `Signed in as ${esc(name)} · <a href="#" id="signOutLink">Sign out</a>`;
+      document.getElementById('signOutLink').addEventListener('click', async e => {
+        e.preventDefault(); await sb.auth.signOut(); renderAccount();
+      });
+    }
+    document.getElementById('payBtn').disabled = !session;
+  }
+
+  document.getElementById('toggleBtn').addEventListener('click', () => {
+    mode = mode === 'signin' ? 'signup' : 'signin';
+    document.getElementById('nameField').classList.toggle('hidden', mode !== 'signup');
+    document.getElementById('authBtn').textContent = mode === 'signup' ? 'Create account' : 'Sign in';
+    document.getElementById('toggleBtn').textContent = mode === 'signup' ? 'Already have an account? Sign in' : 'New here? Create an account';
+    document.getElementById('authError').textContent = '';
+    renderAccount();
+  });
+
+  document.getElementById('authBtn').addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value.trim();
+    const errEl = document.getElementById('authError');
+    errEl.textContent = '';
+    if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; return; }
+    const { data, error } = mode === 'signup'
+      ? await akSignUp(name, email, password)
+      : await akSignIn(email, password);
+    if (error) { errEl.textContent = error.message; return; }
+    if (mode === 'signup' && !data.session) {
+      errEl.textContent = 'Account created. Please confirm your email, then sign in here to pay.';
+      return;
+    }
+    renderAccount();
+  });
+
+  document.getElementById('payBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('payBtn');
+    const errEl = document.getElementById('payError');
+    const items = getCart();
+    const label = btn.textContent;
+    errEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Starting checkout…';
+    const restore = () => { btn.disabled = false; btn.textContent = label; };
+    try {
+      const order = await akCallFunction('create-order', { bookSlugs: items.map(i => i.slug), currency: 'INR' });
+      const rzp = new Razorpay({
+        key: order.razorpayKeyId,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.orderId,
+        name: 'Avinash Kumar',
+        description: order.bookTitle,
+        theme: { color: '#4FA39B' },
+        handler: async function (response) {
+          btn.textContent = 'Verifying payment…';
+          try {
+            await akCallFunction('verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            setCart([]);
+            window.location.href = 'my-library.html?purchased=1';
+          } catch (e) {
+            setCart([]);
+            errEl.textContent = e.message || 'Your payment was received. Your library is being updated — please check My Library shortly.';
+            btn.textContent = label;
+          }
+        },
+        modal: { ondismiss: restore }
+      });
+      rzp.open();
+    } catch (e) {
+      errEl.textContent = e.message === 'NOT_LOGGED_IN' ? 'Please sign in first.' : (e.message || 'Checkout could not be started. Please try again.');
+      restore();
+    }
+  });
+
+  renderCart();
+  renderAccount();
+</script>
+
+</body>
+</html>
