@@ -22,8 +22,8 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   - `verify-payment.js` — verifies the Razorpay signature, marks the order's purchases paid, grants library access
   - `razorpay-webhook.js` — Razorpay's server-to-server `payment.captured` / `order.paid` events; same
     fulfilment as verify-payment, for buyers who close the tab. Checks `X-Razorpay-Signature` and the amount.
-- `netlify/lib/fulfill.js` — shared "mark paid + add to library" logic (outside `functions/` so it isn't deployed as one)
   - `get-read-url.js` — checks entitlement, returns a 120-second Supabase Storage signed URL
+- `netlify/lib/fulfill.js` — shared "mark paid + add to library" logic (outside `functions/` so it isn't deployed as one)
 - `schema.sql` (v1), `supabase/schema-v2.sql` (v2, current Digital Edition +
   library system) and `supabase/schema-v3-security.sql` (admin-only access via
   `is_admin()` = `profiles.role = 'admin'`; readers can't change their own role).

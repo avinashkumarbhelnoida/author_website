@@ -65,7 +65,13 @@
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px;}
   .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic; display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--bone);}
   .brand-mark{width:34px; height:34px; display:block;}
-  .navlinks{display:flex; gap:22px; font-size:13.5px; white-space:nowrap;}
+  .navlinks{display:flex; align-items:center; gap:22px; font-size:13.5px; white-space:nowrap; margin-left:auto;}
+  .nav-actions{display:flex; align-items:center; gap:14px; margin-left:22px;}
+  .nav-toggle{display:none; width:40px; height:40px; background:none; border:1px solid var(--line); border-radius:2px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:0;}
+  .nav-toggle span{display:block; width:18px; height:1.5px; background:var(--bone); transition:transform .2s ease, opacity .2s ease;}
+  nav.menu-open .nav-toggle span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+  nav.menu-open .nav-toggle span:nth-child(2){opacity:0;}
+  nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
   .navlinks a{text-decoration:none; color:var(--bone-dim); transition:color .15s;}
   .navlinks a:hover{color:var(--bone);}
   a:focus-visible, button:focus-visible{outline:1px solid var(--ghost-teal); outline-offset:4px;}
@@ -305,7 +311,22 @@
   footer .copy{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim);}
 
   @media (max-width:980px){
-    .navlinks{display:none;}
+    nav .wrap{padding:14px 24px;}
+    .nav-toggle{display:inline-flex;}
+    .navlinks{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0; margin:0;
+      background:var(--graphite-2); border-bottom:1px solid var(--line);
+      padding:6px 24px 18px; max-height:calc(100vh - 70px); overflow-y:auto;
+      font-size:15px; white-space:normal; box-shadow:0 24px 40px -20px rgba(0,0,0,0.7);
+    }
+    nav.menu-open .navlinks{display:flex;}
+    .navlinks > a, .navlinks .nav-genre-btn{
+      display:flex; justify-content:space-between; align-items:center; width:100%;
+      padding:14px 0; border-bottom:1px solid var(--line); font-size:15px; text-align:left; color:var(--bone);
+    }
+    .nav-genre-menu{position:static; transform:none; min-width:0; box-shadow:none; border:none; background:none; padding:4px 0 8px 14px;}
+    .nav-genre-menu a{padding:10px 0; font-size:14.5px;}
   }
 
   @media (max-width:860px){
@@ -328,7 +349,6 @@
     .shelf-grid{grid-template-columns:1fr;}
     .shelf-covers{flex-direction:column;}
     .door-grid{grid-template-columns:1fr;}
-    .navlinks{display:none;}
     .signup-box{padding:34px 20px;}
     form{flex-direction:column; gap:12px; border-bottom:none;}
     form button{width:100%;}
@@ -346,7 +366,7 @@
 <nav>
   <div class="wrap">
     <a class="brand" href="index.html"><img class="brand-mark" src="images/logo/logo-128.png" alt="" width="34" height="34">Avinash Kumar</a>
-    <div class="navlinks">
+    <div class="navlinks" id="navLinks">
       <a href="why-books.html">Why Books</a>
       <div class="nav-genre nav-drop">
         <button class="nav-genre-btn" type="button" aria-expanded="false">My Works <span class="caret">&#9662;</span></button>
@@ -377,8 +397,13 @@
           <a href="#shelf" data-genre="science">Science</a>
         </div>
       </div>
+    </div>
+    <div class="nav-actions">
       <button class="nav-cart" id="cartBtn" type="button" aria-label="Open cart">
         Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
       </button>
     </div>
   </div>
@@ -618,9 +643,8 @@
       <div class="find-me">
         <span class="find-me-label">Find me on</span>
         <div class="social">
-          <!-- TODO: replace with your Instagram and Facebook profile URLs -->
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z"/></svg></a>
+          <a href="https://www.instagram.com/authoravinashkumar/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61595163143580" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.9v3h2.6V21h3z"/></svg></a>
         </div>
       </div>
     </div>
@@ -697,8 +721,8 @@
   <div class="wrap">
     <div class="copy">© 2026 Avinash Kumar</div>
     <div class="f-links">
-      <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a>
+      <a href="https://www.instagram.com/authoravinashkumar/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61595163143580" target="_blank" rel="noopener">Facebook</a>
       <a href="#">Press kit</a>
       <a href="#contact">Contact</a>
     </div>
@@ -839,6 +863,28 @@
   });
   document.addEventListener('click', function(){ closeNavDrops(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeNavDrops(); });
+
+  // ---------- Mobile menu ----------
+  var navEl = document.querySelector('nav');
+  var navToggle = document.getElementById('navToggle');
+  function setMenu(open){
+    navEl.classList.toggle('menu-open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  navToggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    setMenu(!navEl.classList.contains('menu-open'));
+  });
+  // Following a link closes the menu; dropdown buttons just expand in place.
+  document.querySelectorAll('#navLinks a').forEach(function(link){
+    link.addEventListener('click', function(){ setMenu(false); });
+  });
+  document.addEventListener('click', function(e){
+    if (!navEl.contains(e.target)) setMenu(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+  window.addEventListener('resize', function(){ if (window.innerWidth > 980) setMenu(false); });
 
   genreMenu.querySelectorAll('a').forEach(function(link){
     link.addEventListener('click', function(){
