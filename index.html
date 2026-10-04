@@ -61,20 +61,25 @@
   @keyframes shift-b{0%,100%{transform:translate(3px,-1px);}50%{transform:translate(1px,0px);}}
 
   /* ---------- nav ---------- */
-  nav{position:sticky; top:0; z-index:20; background:rgba(21,23,27,0.86); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
+  nav{
+    --nav-cream:#DDD8CE; --nav-ink:#15171B; --nav-ink-dim:#4A4944; --nav-line:rgba(21,23,27,0.14);
+    position:sticky; top:0; z-index:20; background:var(--nav-cream); color:var(--nav-ink);
+    border-bottom:1px solid var(--nav-line); box-shadow:0 10px 30px -18px rgba(0,0,0,0.6);
+  }
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px;}
-  .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic; display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--bone);}
+  .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic; display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--nav-ink);}
   .brand-mark{width:34px; height:34px; display:block;}
   .navlinks{display:flex; align-items:center; gap:22px; font-size:13.5px; white-space:nowrap; margin-left:auto;}
   .nav-actions{display:flex; align-items:center; gap:14px; margin-left:22px;}
-  .nav-toggle{display:none; width:40px; height:40px; background:none; border:1px solid var(--line); border-radius:2px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:0;}
-  .nav-toggle span{display:block; width:18px; height:1.5px; background:var(--bone); transition:transform .2s ease, opacity .2s ease;}
+  .nav-toggle{display:none; width:40px; height:40px; background:none; border:1px solid var(--nav-line); border-radius:2px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:0;}
+  .nav-toggle span{display:block; width:18px; height:1.5px; background:var(--nav-ink); transition:transform .2s ease, opacity .2s ease;}
   nav.menu-open .nav-toggle span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
   nav.menu-open .nav-toggle span:nth-child(2){opacity:0;}
   nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
-  .navlinks a{text-decoration:none; color:var(--bone-dim); transition:color .15s;}
-  .navlinks a:hover{color:var(--bone);}
+  .navlinks a{text-decoration:none; color:var(--nav-ink-dim); transition:color .15s;}
+  .navlinks a:hover{color:var(--nav-ink);}
   a:focus-visible, button:focus-visible{outline:1px solid var(--ghost-teal); outline-offset:4px;}
+  nav a:focus-visible, nav button:focus-visible{outline-color:var(--nav-ink);}
 
   /* ---------- hero ---------- */
   .hero{padding:44px 0 90px; position:relative; overflow:hidden;}
@@ -99,9 +104,10 @@
   .btn-outline{background:transparent; color:var(--bone);}
   .btn-outline:hover{background:var(--bone); color:var(--graphite);}
 
-  .evidence{position:relative; height:380px;}
+  .evidence{position:relative; height:380px; transition:opacity 1.2s ease, filter 1.2s ease, transform 1.2s ease;}
+  .evidence.is-swapping{opacity:0; filter:blur(6px); transform:translateY(6px);}
   .frame{
-    position:absolute; width:210px; height:290px;
+    position:absolute; height:290px; width:calc(290px * var(--ar, 0.72));
     background:var(--graphite-2); border:1px solid var(--line);
     padding:20px; display:flex; flex-direction:column; justify-content:space-between;
     font-family:'IBM Plex Mono', monospace;
@@ -114,7 +120,7 @@
   .frame-2{top:70px; left:0; transform:rotate(5deg); z-index:1; box-shadow:0 24px 40px -18px rgba(0,0,0,0.6); padding:0; overflow:hidden;}
   .frame-2::after{content:"";position:absolute; inset:0; border:1px solid var(--ghost-rose); transform:translate(3px,-3px); opacity:.4; pointer-events:none; z-index:3;}
   .frame-cover-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; z-index:0;}
-  .frame-cover-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,18,21,0) 32%, rgba(16,18,21,0.94) 100%); z-index:1;}
+  .frame-cover-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,18,21,0) 72%, rgba(16,18,21,0.85) 100%); z-index:1;}
   .frame-2 .frame-text{position:relative; z-index:2; padding:20px; display:flex; flex-direction:column; gap:6px; height:100%; justify-content:flex-end;}
 
   /* ---------- author ---------- */
@@ -160,29 +166,29 @@
   /* ---------- nav: genre dropdown + cart ---------- */
   .nav-genre{position:relative;}
   .nav-genre-btn{
-    font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--bone-dim);
+    font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--nav-ink-dim);
     background:none; border:none; cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:5px;
   }
-  .nav-genre-btn:hover{color:var(--bone);}
+  .nav-genre-btn:hover, .nav-genre.open .nav-genre-btn{color:var(--nav-ink);}
   .nav-genre-btn .caret{font-size:10px; transition:transform .15s ease;}
   .nav-genre.open .nav-genre-btn .caret{transform:rotate(180deg);}
   .nav-genre-menu{
     display:none; position:absolute; top:26px; left:50%; transform:translateX(-50%);
-    background:var(--graphite-2); border:1px solid var(--line); min-width:200px; z-index:30;
+    background:#E8E3D8; border:1px solid var(--nav-line); min-width:200px; z-index:30;
     box-shadow:0 18px 36px -12px rgba(0,0,0,0.6); padding:6px 0;
   }
   .nav-genre.open .nav-genre-menu{display:block;}
   .nav-genre-menu a{
-    display:block; padding:9px 16px; font-size:13px; text-decoration:none; color:var(--bone-dim); white-space:nowrap;
+    display:block; padding:9px 16px; font-size:13px; text-decoration:none; color:var(--nav-ink-dim); white-space:nowrap;
   }
-  .nav-genre-menu a:hover{background:rgba(232,227,216,0.06); color:var(--bone);}
-  .nav-genre-menu a.active{color:var(--ghost-teal);}
+  .nav-genre-menu a:hover{background:rgba(21,23,27,0.06); color:var(--nav-ink);}
+  .nav-genre-menu a.active{color:#2E7A72;}
   .nav-cart{
-    font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--bone-dim);
-    background:none; border:1px solid var(--line); border-radius:2px; cursor:pointer;
+    font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--nav-ink-dim);
+    background:none; border:1px solid rgba(21,23,27,0.28); border-radius:2px; cursor:pointer;
     padding:6px 12px; display:inline-flex; align-items:center; gap:8px; transition:border-color .15s ease, color .15s ease;
   }
-  .nav-cart:hover{border-color:var(--ghost-teal); color:var(--bone);}
+  .nav-cart:hover{border-color:var(--nav-ink); color:var(--nav-ink);}
   .cart-count{
     font-family:'IBM Plex Mono', monospace; font-size:11px; background:var(--ghost-rose); color:var(--graphite);
     border-radius:50%; min-width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; padding:0 2px;
@@ -316,14 +322,14 @@
     .navlinks{
       display:none; position:absolute; top:100%; left:0; right:0;
       flex-direction:column; align-items:stretch; gap:0; margin:0;
-      background:var(--graphite-2); border-bottom:1px solid var(--line);
+      background:var(--nav-cream); border-bottom:1px solid var(--nav-line);
       padding:6px 24px 18px; max-height:calc(100vh - 70px); overflow-y:auto;
       font-size:15px; white-space:normal; box-shadow:0 24px 40px -20px rgba(0,0,0,0.7);
     }
     nav.menu-open .navlinks{display:flex;}
     .navlinks > a, .navlinks .nav-genre-btn{
       display:flex; justify-content:space-between; align-items:center; width:100%;
-      padding:14px 0; border-bottom:1px solid var(--line); font-size:15px; text-align:left; color:var(--bone);
+      padding:14px 0; border-bottom:1px solid var(--nav-line); font-size:15px; text-align:left; color:var(--nav-ink);
     }
     .nav-genre-menu{position:static; transform:none; min-width:0; box-shadow:none; border:none; background:none; padding:4px 0 8px 14px;}
     .nav-genre-menu a{padding:10px 0; font-size:14.5px;}
@@ -357,7 +363,7 @@
   @media (prefers-reduced-motion: reduce){
     .glitch::before,.glitch::after{animation:none;}
     .book-card{transition:none;}
-    .hero h1, .hero h1.is-swapping{transition:none; filter:none; transform:none;}
+    .hero h1, .hero h1.is-swapping, .evidence{transition:none; filter:none; transform:none;}
   }
 </style>
 </head>
@@ -420,17 +426,14 @@
         <a class="btn btn-outline" href="#about">About the author</a>
       </div>
     </div>
-    <div class="evidence">
-      <div class="frame frame-1">
-        <picture><source type="image/avif" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.avif 446w" sizes="(max-width:600px) 90vw, 500px"><source type="image/webp" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.webp 446w" sizes="(max-width:600px) 90vw, 500px"><img class="frame-cover-img"  alt="The Mind Files — Vol-I: Invisible Threads cover" src="images/books/the-mind-files-vol-i-invisible-threads-446.jpg" width="446" height="700" loading="eager" fetchpriority="high"></picture>
-        <div class="frame-cover-overlay"></div>
-        <div class="frame-text"><span class="tag">THE MIND FILES</span></div>
+    <div class="evidence" id="heroCovers">
+      <div class="frame frame-1" style="--ar:0.6371">
+        <picture><source type="image/avif" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.avif 446w" sizes="210px"><source type="image/webp" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.webp 446w" sizes="210px"><img class="frame-cover-img" alt="The Mind Files — front cover" src="images/books/the-mind-files-vol-i-invisible-threads-446.jpg" width="446" height="700" loading="eager" fetchpriority="high"></picture>
       </div>
-      <div class="frame frame-2">
-        <picture><source type="image/avif" srcset="images/books/beyond-what-we-see-vol-i-252.avif 252w" sizes="(max-width:600px) 90vw, 500px"><source type="image/webp" srcset="images/books/beyond-what-we-see-vol-i-252.webp 252w" sizes="(max-width:600px) 90vw, 500px"><img class="frame-cover-img"  alt="Beyond What We See — Vol-I cover" src="images/books/beyond-what-we-see-vol-i-252.jpg" width="252" height="512" loading="eager"></picture>
-        <div class="frame-cover-overlay"></div>
-        <div class="frame-text"><span class="tag">BEYOND WHAT WE SEE</span><span class="ttl">Vol-I</span></div>
+      <div class="frame frame-2" style="--ar:0.6373">
+        <picture><source type="image/avif" srcset="images/books/the-mind-files-back-297.avif 297w" sizes="210px"><source type="image/webp" srcset="images/books/the-mind-files-back-297.webp 297w" sizes="210px"><img class="frame-cover-img" alt="The Mind Files — back cover" src="images/books/the-mind-files-back-297.jpg" width="297" height="466" loading="eager"></picture>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -656,29 +659,32 @@
     <span class="eyebrow">The Journal</span>
     <h2 class="section-head" style="margin-top:16px;">Six doors into the mind.</h2>
     <div class="door-grid">
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-consciousness.html" style="text-decoration:none;">
         <h3>Consciousness</h3>
         <p>What it means to be aware, and where that awareness comes from.</p>
+        <span class="latest">Latest: Who Is Watching When You Watch Yourself Think?</span>
       </a>
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-dreams-intuition.html" style="text-decoration:none;">
         <h3>Dreams &amp; Intuition</h3>
         <p>The parts of the mind that speak before the rest of it agrees.</p>
+        <span class="latest">Latest: Why Do Some Gut Feelings Arrive Before the Facts Do?</span>
       </a>
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-perception-reality.html" style="text-decoration:none;">
         <h3>Perception &amp; Reality</h3>
         <p>How confidently the brain fills in what it never actually saw.</p>
+        <span class="latest">Latest: Do You See the World, or Your Brain’s Best Guess of It?</span>
       </a>
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-memory-emotion.html" style="text-decoration:none;">
         <h3>Memory &amp; Emotion</h3>
         <p>Why memory edits itself, and who's holding the pen.</p>
         <span class="latest">Latest: Can Your Memory Be Wrong Without You Knowing It?</span>
       </a>
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-coincidence.html" style="text-decoration:none;">
         <h3>Coincidence</h3>
         <p>Pattern recognition, attention, and the stories we build around them.</p>
         <span class="latest">Latest: Why Do We Notice 11:11?</span>
       </a>
-      <a class="door" href="#" style="text-decoration:none;">
+      <a class="door" href="journal-human-behaviour.html" style="text-decoration:none;">
         <h3>Human Behaviour</h3>
         <p>The quiet forces behind the things we do and don't understand why.</p>
         <span class="latest">Latest: Why Some Strangers Tell Us Things They Never Tell Their Friends</span>
@@ -908,29 +914,40 @@
 
 <script>
   // ---- Rotating hero headline, same glitch effect on the key word each time ----
+  // Front + back cover shown in the hero for each tagline: [file base, width, height]
+  const heroBooks = {
+    'the-mind-files': { title: 'The Mind Files', front: ['the-mind-files-vol-i-invisible-threads', 446, 700], back: ['the-mind-files-back', 297, 466] },
+    'white-grey-and-dark': { title: 'White, Grey & Dark', front: ['white-grey-and-dark-vol-i-the-man-he-was', 425, 700], back: ['white-grey-and-dark-vol-i-the-man-he-was-back', 283, 466] },
+    'beyond-what-we-see': { title: 'Beyond What We See', front: ['beyond-what-we-see', 367, 700], back: ['beyond-what-we-see-back', 294, 560] },
+    'the-person-i-want-to-be': { title: 'The Person I Want To Be', front: ['the-person-i-want-to-be', 457, 700], back: ['the-person-i-want-to-be-back', 304, 466] },
+    'love-bytes': { title: 'Love Bytes', front: ['love-bytes', 467, 700], back: ['love-bytes-back', 311, 466] },
+    'his-mind-her-mind': { title: 'His Mind. Her Mind.', front: ['his-mind-her-mind', 436, 700], back: ['his-mind-her-mind-back', 290, 466] },
+    'beyond-the-realities': { title: 'Beyond the Realities', front: ['beyond-the-realities', 488, 700], back: ['beyond-the-realities-back', 325, 466] }
+  };
+
   const heroHeadlines = [
     // Psychological Thriller
-    { pre: 'What you remember<br>is not what ', word: 'happened.' },
-    { pre: 'The story you tell yourself<br>is rarely the ', word: 'truth.' },
+    { pre: 'What you remember<br>is not what ', word: 'happened.', book: 'the-mind-files' },
+    { pre: 'The story you tell yourself<br>is rarely the ', word: 'truth.', book: 'white-grey-and-dark' },
     // Conceptual Thriller / Mystery
-    { pre: 'Reality is only half<br>of what you ', word: 'perceive.' },
-    { pre: 'The mind sees first.<br>The eyes just ', word: 'follow.' },
+    { pre: 'Reality is only half<br>of what you ', word: 'perceive.', book: 'beyond-what-we-see' },
+    { pre: 'The mind sees first.<br>The eyes just ', word: 'follow.', book: 'the-mind-files' },
     // Self-Help
-    { pre: "You already have the answers.<br>You just haven't asked the right ", word: 'questions.' },
-    { pre: "Growth isn't found.<br>It's ", word: 'chosen.' },
+    { pre: "You already have the answers.<br>You just haven't asked the right ", word: 'questions.', book: 'the-person-i-want-to-be' },
+    { pre: "Growth isn't found.<br>It's ", word: 'chosen.', book: 'the-person-i-want-to-be' },
     // Relationships
-    { pre: 'Love is not complicated,<br>we ', word: 'are.' },
-    { pre: 'Every relationship runs on<br>a psychology you never ', word: 'noticed.' },
+    { pre: 'Love is not complicated,<br>we ', word: 'are.', book: 'love-bytes' },
+    { pre: 'Every relationship runs on<br>a psychology you never ', word: 'noticed.', book: 'his-mind-her-mind' },
     // Science
-    { pre: 'Reality is not always<br>what it ', word: 'appears to be.' },
-    { pre: 'Illusions are nothing<br>but alternate ', word: 'realities.' },
+    { pre: 'Reality is not always<br>what it ', word: 'appears to be.', book: 'beyond-the-realities' },
+    { pre: 'Illusions are nothing<br>but alternate ', word: 'realities.', book: 'beyond-what-we-see' },
     // Memory / Identity (thriller-adjacent, ties the whole site together)
-    { pre: 'The past never leaves.<br>It just gets ', word: 'rewritten.' },
-    { pre: 'You are not who you think.<br>You are what you ', word: 'forgot.' },
-    { pre: 'Not every monster wears a mask,<br>some wear ', word: 'memories.' },
+    { pre: 'The past never leaves.<br>It just gets ', word: 'rewritten.', book: 'white-grey-and-dark' },
+    { pre: 'You are not who you think.<br>You are what you ', word: 'forgot.', book: 'the-mind-files' },
+    { pre: 'Not every monster wears a mask,<br>some wear ', word: 'memories.', book: 'white-grey-and-dark' },
     // Mythology
-    { pre: 'The gods, the monsters,<br>and their deep-embedded ', word: 'psychologies.' },
-    { pre: 'The Vedic Psychology<br>for a Modern ', word: 'Mind.' }
+    { pre: 'The gods, the monsters,<br>and their deep-embedded ', word: 'psychologies.', book: 'his-mind-her-mind' },
+    { pre: 'The Vedic Psychology<br>for a Modern ', word: 'Mind.', book: 'beyond-the-realities' }
   ];
 
   (function () {
@@ -970,12 +987,59 @@
     const FADE_MS = 1200;    // matches the CSS transition on .hero h1
     const CYCLE_MS = 8000;   // each tagline's turn, including its fade in/out
 
+    const coversEl = document.getElementById('heroCovers');
+    const frontFrame = coversEl.querySelector('.frame-1');
+    const backFrame = coversEl.querySelector('.frame-2');
+    let currentBook = heroHeadlines[0].book;
+
+    function fillPicture(picture, [base, w, h], alt) {
+      const src = `images/books/${base}-${w}`;
+      const sources = picture.querySelectorAll('source');
+      sources[0].srcset = `${src}.avif ${w}w`;
+      sources[1].srcset = `${src}.webp ${w}w`;
+      const img = picture.querySelector('img');
+      img.width = w; img.height = h; img.alt = alt;
+      img.src = `${src}.jpg`;
+      return img;
+    }
+    function coverPicture() {
+      const picture = document.createElement('picture');
+      picture.innerHTML = '<source type="image/avif" sizes="210px"><source type="image/webp" sizes="210px"><img alt="">';
+      return picture;
+    }
+    // Load a book's covers ahead of time so the swap is instant.
+    function preloadBook(slug) {
+      const book = heroBooks[slug];
+      fillPicture(coverPicture(), book.front, '');
+      fillPicture(coverPicture(), book.back, '');
+    }
+    function showBook(slug) {
+      const book = heroBooks[slug];
+      frontFrame.style.setProperty('--ar', book.front[1] / book.front[2]);
+      backFrame.style.setProperty('--ar', book.back[1] / book.back[2]);
+      const imgs = [
+        fillPicture(frontFrame.querySelector('picture'), book.front, `${book.title} — front cover`),
+        fillPicture(backFrame.querySelector('picture'), book.back, `${book.title} — back cover`)
+      ];
+      // Wait (briefly) for the new covers so they fade in already drawn.
+      const ready = Promise.all(imgs.map((img) => img.decode().catch(() => {})));
+      return Promise.race([ready, new Promise((r) => setTimeout(r, 800))]);
+    }
+
+    preloadBook(heroHeadlines[1].book);
+
     setInterval(() => {
+      const item = heroHeadlines[heroIndex];
+      const changeBook = item.book !== currentBook;
       heroEl.classList.add('is-swapping');
-      setTimeout(() => {
-        renderHero(heroHeadlines[heroIndex]);
+      if (changeBook) coversEl.classList.add('is-swapping');
+      setTimeout(async () => {
+        renderHero(item);
+        if (changeBook) { await showBook(item.book); currentBook = item.book; }
         heroEl.classList.remove('is-swapping');
+        coversEl.classList.remove('is-swapping');
         heroIndex = (heroIndex + 1) % heroHeadlines.length;
+        preloadBook(heroHeadlines[heroIndex].book);
       }, FADE_MS);
     }, CYCLE_MS);
   })();
