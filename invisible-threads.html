@@ -92,6 +92,8 @@
     background:none; border:none; color:var(--ghost-teal); font-size:12.5px;
     cursor:pointer; text-decoration:underline; padding:0;
   }
+  .ak-modal .ak-forgot{display:block; margin-top:10px; color:var(--bone-dim);}
+  .ak-modal .ak-error.ok{color:var(--ghost-teal);}
   .ak-modal .ak-error{color:var(--ghost-rose); font-size:12.5px; min-height:16px; margin:0 0 8px;}
   .ak-modal .ak-close{
     float:right; background:none; border:none; color:var(--bone-dim); cursor:pointer; font-size:18px;
@@ -327,6 +329,7 @@
     <p class="ak-error" id="akError"></p>
     <button class="btn primary" id="akSubmitBtn" onclick="akSubmitAuth()">Sign In</button>
     <button class="ak-toggle" id="akToggleBtn" onclick="akToggleMode()">New here? Create an account</button>
+    <button class="ak-toggle ak-forgot" id="akForgotBtn" onclick="akForgotPassword()">Forgot password?</button>
   </div>
 </div>
 
@@ -345,7 +348,19 @@
     document.getElementById('akModalTitle').textContent = akMode === 'signup' ? 'Create your account' : 'Sign in to buy';
     document.getElementById('akSubmitBtn').textContent = akMode === 'signup' ? 'Create Account' : 'Sign In';
     document.getElementById('akToggleBtn').textContent = akMode === 'signup' ? 'Already have an account? Sign in' : "New here? Create an account";
+    document.getElementById('akForgotBtn').style.display = akMode === 'signup' ? 'none' : 'block';
     document.getElementById('akError').textContent = '';
+  }
+
+  async function akForgotPassword(){
+    const email = document.getElementById('akEmail').value.trim();
+    const errEl = document.getElementById('akError');
+    errEl.className = 'ak-error';
+    if (!email){ errEl.textContent = 'Enter your email above, then tap "Forgot password?" again.'; return; }
+    const { error } = await akSendPasswordReset(email);
+    if (error){ errEl.textContent = error.message; return; }
+    errEl.className = 'ak-error ok';
+    errEl.textContent = `If an account exists for ${email}, a password-reset link is on its way. Check your inbox.`;
   }
 
   async function akSubmitAuth(){
@@ -353,6 +368,7 @@
     const password = document.getElementById('akPassword').value;
     const name = document.getElementById('akName').value.trim();
     const errEl = document.getElementById('akError');
+    errEl.className = 'ak-error';
     errEl.textContent = '';
     if (!email || !password){ errEl.textContent = 'Email and password are required.'; return; }
 

@@ -62,14 +62,14 @@
 
   /* ---------- nav ---------- */
   nav{
-    --nav-cream:#DDD8CE; --nav-ink:#15171B; --nav-ink-dim:#4A4944; --nav-line:rgba(21,23,27,0.14);
+    --nav-cream:#000; --nav-ink:#E8E3D8; --nav-ink-dim:var(--ghost-teal); --nav-line:rgba(232,227,216,0.14);
     position:sticky; top:0; z-index:20; background:var(--nav-cream); color:var(--nav-ink);
     border-bottom:1px solid var(--nav-line); box-shadow:0 10px 30px -18px rgba(0,0,0,0.6);
   }
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px;}
   .brand{font-family:'Newsreader', serif; font-size:20px; letter-spacing:0.01em; font-style:italic; display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:var(--nav-ink);}
   .brand-mark{width:34px; height:34px; display:block;}
-  .navlinks{display:flex; align-items:center; gap:22px; font-size:13.5px; white-space:nowrap; margin-left:auto;}
+  .navlinks{display:flex; align-items:center; gap:22px; font-size:12.5px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; margin-left:auto;}
   .nav-actions{display:flex; align-items:center; gap:14px; margin-left:22px;}
   .nav-toggle{display:none; width:40px; height:40px; background:none; border:1px solid var(--nav-line); border-radius:2px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:0;}
   .nav-toggle span{display:block; width:18px; height:1.5px; background:var(--nav-ink); transition:transform .2s ease, opacity .2s ease;}
@@ -166,26 +166,28 @@
   /* ---------- nav: genre dropdown + cart ---------- */
   .nav-genre{position:relative;}
   .nav-genre-btn{
-    font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--nav-ink-dim);
-    background:none; border:none; cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:5px;
+    font-family:'Work Sans', sans-serif; font-size:12.5px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--nav-ink-dim);
+    background:none; border:none; cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:6px;
   }
   .nav-genre-btn:hover, .nav-genre.open .nav-genre-btn{color:var(--nav-ink);}
   .nav-genre-btn .caret{font-size:10px; transition:transform .15s ease;}
   .nav-genre.open .nav-genre-btn .caret{transform:rotate(180deg);}
+  .nav-genre-btn .caret.plus{font-size:15px; font-weight:400; line-height:1;}
+  .nav-genre.open .nav-genre-btn .caret.plus{transform:rotate(45deg);}
   .nav-genre-menu{
     display:none; position:absolute; top:26px; left:50%; transform:translateX(-50%);
-    background:#E8E3D8; border:1px solid var(--nav-line); min-width:200px; z-index:30;
+    background:#0B0C0E; border:1px solid var(--nav-line); min-width:200px; z-index:30;
     box-shadow:0 18px 36px -12px rgba(0,0,0,0.6); padding:6px 0;
   }
   .nav-genre.open .nav-genre-menu{display:block;}
   .nav-genre-menu a{
-    display:block; padding:9px 16px; font-size:13px; text-decoration:none; color:var(--nav-ink-dim); white-space:nowrap;
+    display:block; padding:9px 16px; font-size:13px; letter-spacing:.02em; text-transform:none; font-weight:400; text-decoration:none; color:var(--bone-dim); white-space:nowrap;
   }
-  .nav-genre-menu a:hover{background:rgba(21,23,27,0.06); color:var(--nav-ink);}
-  .nav-genre-menu a.active{color:#2E7A72;}
+  .nav-genre-menu a:hover{background:rgba(232,227,216,0.06); color:var(--nav-ink);}
+  .nav-genre-menu a.active{color:var(--ghost-teal);}
   .nav-cart{
     font-family:'Work Sans', sans-serif; font-size:13.5px; color:var(--nav-ink-dim);
-    background:none; border:1px solid rgba(21,23,27,0.28); border-radius:2px; cursor:pointer;
+    background:none; border:1px solid rgba(79,163,155,0.45); border-radius:2px; cursor:pointer;
     padding:6px 12px; display:inline-flex; align-items:center; gap:8px; transition:border-color .15s ease, color .15s ease;
   }
   .nav-cart:hover{border-color:var(--nav-ink); color:var(--nav-ink);}
@@ -329,7 +331,7 @@
     nav.menu-open .navlinks{display:flex;}
     .navlinks > a, .navlinks .nav-genre-btn{
       display:flex; justify-content:space-between; align-items:center; width:100%;
-      padding:14px 0; border-bottom:1px solid var(--nav-line); font-size:15px; text-align:left; color:var(--nav-ink);
+      padding:14px 0; border-bottom:1px solid var(--nav-line); font-size:14px; text-align:left; color:var(--nav-ink-dim);
     }
     .nav-genre-menu{position:static; transform:none; min-width:0; box-shadow:none; border:none; background:none; padding:4px 0 8px 14px;}
     .nav-genre-menu a{padding:10px 0; font-size:14.5px;}
@@ -375,7 +377,7 @@
     <div class="navlinks" id="navLinks">
       <a href="why-books.html">Why Books</a>
       <div class="nav-genre nav-drop">
-        <button class="nav-genre-btn" type="button" aria-expanded="false">My Works <span class="caret">&#9662;</span></button>
+        <button class="nav-genre-btn" type="button" aria-expanded="false">My Works <span class="caret plus" aria-hidden="true">+</span></button>
         <div class="nav-genre-menu">
           <a href="#featured">Featured Work</a>
           <a href="#shelf">On the Shelf</a>
@@ -384,7 +386,7 @@
       </div>
       <a href="#about">About the Author</a>
       <div class="nav-genre nav-drop">
-        <button class="nav-genre-btn" type="button" aria-expanded="false">Readers Lounge <span class="caret">&#9662;</span></button>
+        <button class="nav-genre-btn" type="button" aria-expanded="false">Readers Lounge <span class="caret plus" aria-hidden="true">+</span></button>
         <div class="nav-genre-menu">
           <a href="#journal">Journal</a>
           <a href="#discussions">Discussions</a>
@@ -1045,5 +1047,9 @@
   })();
 </script>
 
+<!-- Signed-in readers get a "Signed in as …" tag under the nav -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>akShowSignedInBadge('nav');</script>
 </body>
 </html>
