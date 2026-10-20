@@ -85,6 +85,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({
         url: signed.signedUrl,
+        bookId: book.id,
         expiresInSeconds: SIGNED_URL_EXPIRY_SECONDS,
         title: book.title,
         subtitle: book.subtitle,

@@ -9,7 +9,9 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
   - `index.html` — home page (books, about, etc.)
   - `invisible-threads.html` — book page with "Buy Digital Edition" (Razorpay Checkout)
   - `my-library.html` — the logged-in reader's purchased books
-  - `reader.html` — opens a purchased book via a short-lived signed URL
+  - `reader.html` — PDF reader (PDF.js from cdnjs): fetches the book once via the short-lived signed URL, draws pages
+    to canvas (no download/print), saves progress to `reading_progress` ("Page N"), contents from the PDF outline,
+    bookmarks in `reader_bookmarks`, Paper/Sepia/Night themes + zoom (per-viewer, localStorage), reader-name watermark
   - `admin.html` — admin tools
   - `author-story.html`, `why-books.html` — content pages
   - `journal-<door>.html` — the six Journal "doors" (consciousness, dreams-intuition, perception-reality,
@@ -30,7 +32,8 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
 - `netlify/lib/fulfill.js` — shared "mark paid + add to library" logic (outside `functions/` so it isn't deployed as one)
 - `schema.sql` (v1), `supabase/schema-v2.sql` (v2, current Digital Edition +
   library system) and `supabase/schema-v3-security.sql` (admin-only access via
-  `is_admin()` = `profiles.role = 'admin'`; readers can't change their own role).
+  `is_admin()` = `profiles.role = 'admin'`; readers can't change their own role) and
+  `supabase/schema-v4-reader.sql` (`reader_bookmarks`; the reader works without it, bookmarks just stay off).
   Run them manually in the Supabase SQL Editor.
 - Cart: `localStorage['akCart']` = `[{slug, title, priceInr, priceUsd}]`, display only —
   prices are always re-read from `books_catalog` by `create-order`.
