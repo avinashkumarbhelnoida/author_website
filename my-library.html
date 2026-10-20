@@ -407,6 +407,7 @@
 
     if (!session) {
       $('#signinGate').style.display = 'block';
+      if (location.hash === '#signin') setAuthMode('signin');
       return;
     }
 
