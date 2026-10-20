@@ -16,8 +16,10 @@ reader library. Hosted on Netlify, backed by Supabase and Razorpay.
     memory-emotion, coincidence, human-behaviour), linked from the home page's Journal section
   - `404.html` — not-found page (Netlify serves it automatically; use root-relative links)
   - `checkout.html` — cart checkout: sign in, then one Razorpay payment for every book in the cart
+  - `reset-password.html` — landing page for the "Forgot password?" email link; its URL must be in
+    Supabase → Authentication → URL Configuration → Redirect URLs
 - `auth.js` — shared Supabase client + helpers (`akGetSession`, `akSignIn`,
-  `akSignUp`, `akSignOut`, `akCallFunction`). Load it after the Supabase CDN script.
+  `akSignUp`, `akSignOut`, `akCallFunction`, `akSendPasswordReset`, `akShowSignedInBadge`). Load it after the Supabase CDN script.
 - `netlify/functions/` — serverless functions (Node, CommonJS):
   - `create-order.js` — validates the user, reads real prices from the DB, refuses books already owned,
     creates ONE Razorpay order for one or more books (`bookSlugs`), one `purchases` row per book

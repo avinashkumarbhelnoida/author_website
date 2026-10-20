@@ -25,19 +25,18 @@
   a{color:var(--ghost-teal);}
 
   .topbar{
+    position:sticky; top:0; z-index:20; background:#000;
     display:flex; justify-content:space-between; align-items:center; gap:20px;
-    padding:16px max(20px, calc((100vw - 1160px)/2)); border-bottom:1px solid var(--line);
+    padding:18px max(20px, calc((100vw - 1160px)/2)); border-bottom:1px solid var(--line);
+    box-shadow:0 10px 30px -18px rgba(0,0,0,0.6);
   }
-  .brand{display:flex; align-items:center; gap:12px; color:var(--bone); text-decoration:none; font:20px var(--serif); letter-spacing:.04em;}
-  .brand img{width:34px; height:34px;}
-  .brand small{display:block; font:10px var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--bone-dim);}
-  .toplinks{display:flex; align-items:center; gap:24px; font:11px var(--mono); letter-spacing:.1em; text-transform:uppercase;}
-  .toplinks a{color:var(--bone-dim); text-decoration:none;}
-  .toplinks a:hover, .toplinks a[aria-current]{color:var(--ghost-teal);}
-  .avatar{
-    width:35px; height:35px; border-radius:50%; border:1px solid var(--line);
-    background:var(--graphite-2); color:var(--bone); font:12px var(--mono); display:none;
-  }
+  /* same brand as the home page nav */
+  .brand{display:inline-flex; align-items:center; gap:12px; color:var(--bone); text-decoration:none;
+    font-family:var(--serif); font-size:20px; font-style:italic; letter-spacing:.01em;}
+  .brand img{width:34px; height:34px; display:block;}
+  .toplinks{display:flex; align-items:center; gap:22px; font:500 12.5px var(--sans); letter-spacing:.08em; text-transform:uppercase;}
+  .toplinks a{color:var(--ghost-teal); text-decoration:none; white-space:nowrap;}
+  .toplinks a:hover, .toplinks a[aria-current]{color:var(--bone);}
 
   main{max-width:1160px; margin:auto; padding:0 22px;}
   .hero{
@@ -48,7 +47,25 @@
   h1{font:400 clamp(42px,6vw,62px)/1 var(--serif); letter-spacing:-.03em; margin:10px 0 14px;}
   h1 span{color:var(--ghost-teal);}
   .hero p{max-width:570px; color:var(--bone-dim); margin:0;}
-  .quote{font:italic 17px/1.5 var(--serif); color:var(--ghost-teal); text-align:right;}
+  .hero-side{text-align:right;}
+  /* ~40% of the "My Library" heading, same face */
+  .hero .welcome{font:400 clamp(17px,2.4vw,25px)/1.2 var(--serif); letter-spacing:-.01em; color:var(--bone); margin:0 0 14px; max-width:none;}
+  .welcome:empty{display:none;}
+  .quote{font:italic 17px/1.5 var(--serif); color:var(--ghost-teal);}
+
+  /* sign-in / create account, for readers who aren't signed in */
+  .gate-choices{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .gate-browse{display:inline-block; margin-top:18px; font:11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--bone-dim);}
+  .gate-browse:hover{color:var(--ghost-teal);}
+  .auth-form{max-width:360px; margin:26px auto 0; text-align:left;}
+  .auth-form label{display:block; font:11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--bone-dim); margin:12px 0 6px;}
+  .auth-form input{width:100%; background:var(--graphite-2); border:1px solid var(--line); color:var(--bone); padding:10px 12px; font:14px var(--sans);}
+  .auth-form .btn{width:100%; margin-top:18px; padding:12px 14px;}
+  .link-btn{background:none; border:0; padding:0; margin-top:12px; color:var(--bone-dim); font-size:12.5px; text-decoration:underline;}
+  .link-btn:hover{color:var(--ghost-teal);}
+  .auth-msg{font-size:13px; min-height:18px; margin:12px 0 0; color:var(--ghost-rose);}
+  .auth-msg.ok{color:var(--ghost-teal);}
+  .hidden{display:none !important;}
 
   .success-banner{
     display:none; margin-top:24px; padding:14px 18px; border:1px solid var(--ghost-teal);
@@ -138,16 +155,15 @@
 
   @media (max-width:850px){
     .grid{grid-template-columns:repeat(2, minmax(0,1fr));}
-    .quote{display:none;}
+    .hero{flex-direction:column; align-items:start;}
+    .hero-side{text-align:left;}
+    .topbar{flex-wrap:wrap; row-gap:12px;}
+    .toplinks{width:100%; overflow-x:auto; gap:18px;}
   }
   @media (max-width:580px){
     .topbar{padding:13px 16px;}
-    .brand{font-size:16px; gap:9px; white-space:nowrap;}
     .brand img{width:30px; height:30px;}
-    .brand small{display:none;}
-    .toplinks a{white-space:nowrap;}
-    .toplinks{gap:12px;}
-    .toplinks a:not(.keep){display:none;}
+    .toplinks{font-size:10.5px; letter-spacing:.05em; gap:0; justify-content:space-between;}
     main{padding:0 16px;}
     .hero{padding:35px 0 25px;}
     .grid{grid-template-columns:1fr;}
@@ -172,13 +188,14 @@
 <header class="topbar">
   <a class="brand" href="index.html">
     <img src="images/logo/logo-128.png" alt="" width="34" height="34">
-    <span>AVINASH KUMAR<small>Author · Ideas · Human Behaviour</small></span>
+    Avinash Kumar
   </a>
   <nav class="toplinks">
+    <a href="index.html">Home</a>
     <a href="index.html#shelf">Books</a>
     <a href="index.html#journal">Journal</a>
-    <a class="keep" href="my-library.html" aria-current="page">My Library</a>
-    <button class="avatar" id="avatar" type="button" aria-label="Account"></button>
+    <a href="index.html#discussions">Discussions</a>
+    <a href="my-library.html" aria-current="page">My Library</a>
   </nav>
 </header>
 
@@ -189,7 +206,10 @@
       <h1>My Library<span>.</span></h1>
       <p>A quiet place for the books you've chosen. Pick up where you left off and keep your reading close.</p>
     </div>
-    <div class="quote">“A book is not merely read.<br>It becomes part of the reader.”</div>
+    <div class="hero-side">
+      <p class="welcome" id="welcomeMsg"></p>
+      <div class="quote">“A book is not merely read.<br>It becomes part of the reader.”</div>
+    </div>
   </section>
 
   <div class="success-banner" id="successBanner">Your Digital Edition has been added to your library.</div>
@@ -199,7 +219,25 @@
   <div id="signinGate" class="state" style="display:none;">
     <h2>Sign in to see your library</h2>
     <p>Your purchased Digital Editions live here.</p>
-    <a class="btn" href="invisible-threads.html#buy">Sign In / Browse Books</a>
+    <div class="gate-choices">
+      <button class="btn" id="showSignin" type="button">Sign in</button>
+      <button class="btn alt" id="showSignup" type="button">New here? Create an account</button>
+    </div>
+    <a class="gate-browse" href="index.html#shelf">Browse books</a>
+
+    <form class="auth-form hidden" id="authForm" novalidate>
+      <div id="nameField" class="hidden">
+        <label for="authName">Name</label>
+        <input id="authName" autocomplete="name">
+      </div>
+      <label for="authEmail">Email</label>
+      <input id="authEmail" type="email" autocomplete="email">
+      <label for="authPassword">Password</label>
+      <input id="authPassword" type="password" autocomplete="current-password">
+      <button class="btn" id="authSubmit" type="submit">Sign in</button>
+      <button class="link-btn" id="forgotBtn" type="button">Forgot password?</button>
+      <p class="auth-msg" id="authMsg"></p>
+    </form>
   </div>
 
   <div id="libraryView" style="display:none;">
@@ -211,7 +249,6 @@
     <section id="booksSection">
       <div class="head">
         <div><div class="eyebrow">The collection</div><h2>Your Books</h2></div>
-        <p id="welcomeMsg"></p>
       </div>
       <div class="grid" id="bookGrid"></div>
       <div id="emptyState" class="state" style="display:none;">
@@ -273,7 +310,55 @@
     (t === 'books' ? $('#booksSection') : $('#accountPanel')).scrollIntoView({ behavior:'smooth', block:'start' });
   }
   document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
-  $('#avatar').onclick = () => showTab('account');
+
+  // ---- sign in / create account / forgot password (signed-out readers)
+  let authMode = 'signin';
+  function setAuthMode(m){
+    authMode = m;
+    $('#authForm').classList.remove('hidden');
+    $('#nameField').classList.toggle('hidden', m !== 'signup');
+    $('#forgotBtn').classList.toggle('hidden', m !== 'signin');
+    $('#authSubmit').textContent = m === 'signup' ? 'Create account' : 'Sign in';
+    $('#authPassword').autocomplete = m === 'signup' ? 'new-password' : 'current-password';
+    $('#showSignin').classList.toggle('alt', m !== 'signin');
+    $('#showSignup').classList.toggle('alt', m !== 'signup');
+    authMsg('');
+    $(m === 'signup' ? '#authName' : '#authEmail').focus();
+  }
+  function authMsg(text, ok){
+    $('#authMsg').textContent = text;
+    $('#authMsg').classList.toggle('ok', !!ok);
+  }
+  $('#showSignin').onclick = () => setAuthMode('signin');
+  $('#showSignup').onclick = () => setAuthMode('signup');
+
+  $('#authForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = $('#authEmail').value.trim(), password = $('#authPassword').value, name = $('#authName').value.trim();
+    if (!email || !password) { authMsg('Please enter your email and password.'); return; }
+    if (authMode === 'signup' && !name) { authMsg('Please enter your name.'); return; }
+    $('#authSubmit').disabled = true;
+    const { data, error } = authMode === 'signup'
+      ? await akSignUp(name, email, password)
+      : await akSignIn(email, password);
+    $('#authSubmit').disabled = false;
+    if (error) { authMsg(error.message); return; }
+    if (authMode === 'signup' && !data.session) {
+      setAuthMode('signin');
+      authMsg(`Account created. We've sent a confirmation link to ${email} — confirm it, then sign in here.`, true);
+      return;
+    }
+    $('#signinGate').style.display = 'none';
+    loadLibrary();
+  });
+
+  $('#forgotBtn').onclick = async () => {
+    const email = $('#authEmail').value.trim();
+    if (!email) { authMsg('Enter your email above, then tap "Forgot password?" again.'); return; }
+    const { error } = await akSendPasswordReset(email);
+    if (error) { authMsg(error.message); return; }
+    authMsg(`If an account exists for ${email}, a password-reset link is on its way. Check your inbox.`, true);
+  };
 
   function coverHtml(book){
     if (book.cover_url) {
@@ -322,6 +407,7 @@
 
     if (!session) {
       $('#signinGate').style.display = 'block';
+      if (location.hash === '#signin') setAuthMode('signin');
       return;
     }
 
@@ -329,9 +415,7 @@
     const name = user.user_metadata?.name || '';
     $('#welcomeMsg').textContent = `Welcome back, ${name || user.email}.`;
     $('#profileLine').textContent = name ? `${name} · ${user.email}` : user.email;
-    const avatar = $('#avatar');
-    avatar.textContent = (name || user.email).trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    avatar.style.display = 'inline-block';
+    akShowSignedInBadge('.topbar');
 
     if (new URLSearchParams(window.location.search).get('purchased') === '1') {
       $('#successBanner').classList.add('show');
