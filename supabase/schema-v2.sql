@@ -57,7 +57,7 @@ values (
   'VOL-I: INVISIBLE THREADS',
   'Ten case files exploring the hidden forces that shape human behaviour, perception and choice.',
   249.00,
-  9.99,
+  5.99,
   'invisible-threads/invisible-threads-digital-edition.pdf'
 )
 on conflict (slug) do nothing;

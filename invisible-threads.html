@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invisible Threads — The Mind Files, Vol-I | Avinash Kumar</title>
+<meta name="description" content="Ten case files that reveal the hidden forces shaping how you think, choose, and remember. Read a free sample, then read the Digital Edition online in your private library.">
 <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/images/logo/logo-192.png">
 <link rel="apple-touch-icon" href="/images/logo/apple-touch-icon.png">
@@ -45,6 +46,7 @@
   .glitch::before{color:var(--ghost-teal); transform:translate(-3px,1px);}
   .glitch::after{color:var(--ghost-rose); transform:translate(3px,-1px);}
 
+  /* ---- hero ---- */
   header.hero{padding:72px 0 56px; text-align:center;}
   .cover-shot{
     width:190px; margin:0 auto 30px; border-radius:2px;
@@ -53,23 +55,123 @@
   .cover-shot img{width:100%; height:auto; display:block; border-radius:2px;}
   h1{font-size:clamp(30px,4vw,42px); line-height:1.15; margin:20px 0 14px;}
   p.hook{
-    font-family:'Work Sans', sans-serif; color:var(--bone-dim); font-size:16.5px;
-    max-width:440px; margin:0 auto 34px;
+    color:var(--bone-dim); font-size:16.5px; max-width:440px; margin:0 auto 30px;
   }
-  .buttons{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
-  .buy-option{display:flex; flex-direction:column; align-items:center; gap:6px;}
-  .digital-edition{
-    border:1px solid var(--line); border-radius:6px; padding:18px 22px;
-    background:var(--graphite-2); min-width:220px;
+  .hero-buy{
+    display:inline-flex; flex-direction:column; align-items:stretch; gap:10px;
+    border:1px solid var(--line); border-radius:6px; padding:20px 22px;
+    background:var(--graphite-2); min-width:260px;
   }
-  .de-label{
-    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--ghost-teal); margin-bottom:6px;
+  .hero-buy .edition-name{text-align:center;}
+  .price-line{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--bone); text-align:center;}
+  .price-line span{color:var(--bone-dim);}
+  .de-note{font-size:12.5px; color:var(--bone-dim); margin:0; text-align:center;}
+  .sample-jump{
+    display:inline-block; margin-top:18px; font-family:'IBM Plex Mono', monospace; font-size:12px;
+    letter-spacing:.04em; color:var(--ghost-teal); text-decoration:none;
   }
-  .de-prices{display:flex; flex-direction:column; gap:2px; font-size:14px; color:var(--bone); margin-bottom:6px;}
-  .de-note{font-size:12.5px; color:var(--bone-dim); margin:0 0 12px;}
-  .digital-edition .btn{width:100%; margin-bottom:8px; border:none; cursor:pointer;}
-  .digital-edition .btn:last-child{margin-bottom:0; background:transparent; border:1px solid var(--line); color:var(--bone);}
+  .sample-jump:hover{text-decoration:underline;}
+  .avail-note{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim); margin-top:14px;}
+
+  /* ---- buttons ---- */
+  .btn{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
+    padding:13px 22px; border-radius:2px; text-decoration:none; border:1px solid var(--bone);
+    color:var(--bone); background:transparent; transition:all .18s ease; display:inline-block;
+    cursor:pointer; text-align:center;
+  }
+  .btn:hover{background:var(--bone); color:var(--graphite);}
+  .btn.primary{background:var(--bone); color:var(--graphite);}
+  .btn.primary:hover{background:transparent; color:var(--bone);}
+  .btn.ghost{border-color:var(--line);}
+  .btn.teal{background:var(--ghost-teal); border-color:var(--ghost-teal); color:#101719;}
+  .btn.teal:hover{background:transparent; color:var(--bone);}
+  .btn:disabled{opacity:.6; cursor:wait;}
+
+  /* ---- sections ---- */
+  section{padding:48px 0; border-top:1px solid var(--line);}
+  section h2.label{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--ghost-teal); margin:0 0 20px; font-weight:500;
+  }
+  .intro{color:var(--bone-dim); max-width:620px; margin:0 0 24px;}
+  .pill-label{font:11px 'IBM Plex Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--ghost-teal);}
+  .note{font:11px 'IBM Plex Mono',monospace; color:var(--bone-dim); text-align:center; margin-top:18px;}
+
+  .about{display:flex; gap:24px; align-items:flex-start;}
+  .avatar{
+    width:72px; height:72px; border-radius:50%; overflow:hidden; flex-shrink:0;
+    border:1px solid var(--line); background:var(--graphite-2);
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover; display:block;}
+  .about p{margin:0; font-size:15.5px; color:var(--bone-dim);}
+  .about a{color:var(--ghost-teal);}
+
+  .discovery{padding:64px 0 54px; text-align:center;}
+  .discovery .bigline{font-size:clamp(28px,4vw,43px); line-height:1.2; max-width:720px; margin:16px auto;}
+  .discovery .subline{max-width:580px; margin:0 auto 28px; color:var(--bone-dim);}
+
+  .card-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:stretch;}
+  .card{
+    background:var(--graphite-2); border:1px solid var(--line); padding:26px;
+    display:flex; flex-direction:column;
+  }
+  .card h3{font-size:25px; margin:10px 0;}
+  .card p{color:var(--bone-dim); font-size:14px; margin:0 0 18px;}
+  .card p:last-child{margin-bottom:0;}
+  .card .card-link{margin-top:auto; color:var(--ghost-teal); font:12px 'IBM Plex Mono',monospace; text-decoration:none; letter-spacing:.04em;}
+  .card .card-link:hover{text-decoration:underline;}
+
+  .quote-panel{
+    border-left:2px solid var(--ghost-teal); background:var(--graphite-2); padding:26px 30px; margin:20px 0 0;
+    font:italic 23px/1.45 'Newsreader',serif; color:var(--bone);
+  }
+  .quote-panel small{display:block; margin-top:14px; font:11px 'IBM Plex Mono',monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--bone-dim); font-style:normal;}
+
+  .contents-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .content-item{background:var(--graphite); padding:22px;}
+  .content-item .num{font:11px 'IBM Plex Mono',monospace; color:var(--ghost-teal); letter-spacing:.1em;}
+  .content-item h3{font-size:22px; margin:7px 0 5px;}
+  .content-item p{font-size:13.5px; color:var(--bone-dim); margin:0;}
+
+  .reviews-empty{
+    background:var(--graphite-2); border:1px dashed var(--line); border-radius:2px;
+    padding:28px; text-align:center; color:var(--bone-dim); font-size:14.5px;
+  }
+
+  /* ---- editions ---- */
+  .edition-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; align-items:stretch;}
+  .edition{border:1px solid var(--line); background:var(--graphite-2); padding:24px 20px; display:flex; flex-direction:column;}
+  .edition.featured{border-color:var(--ghost-teal); box-shadow:inset 0 3px 0 var(--ghost-teal);}
+  .edition-name{font:11px 'IBM Plex Mono',monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--ghost-teal);}
+  .edition h3{font-size:25px; margin:10px 0;}
+  .edition p,.edition li{font-size:13.5px; color:var(--bone-dim);}
+  .edition p{margin:0 0 12px;}
+  .edition ul{padding-left:18px; margin:0 0 16px;}
+  .edition .price-large{font:22px 'IBM Plex Mono',monospace; margin:auto 0 4px;}
+  .edition .price-sub{font:11.5px 'IBM Plex Mono',monospace; color:var(--bone-dim); margin-bottom:14px;}
+  .edition .status{font:13px 'IBM Plex Mono',monospace; color:var(--bone-dim); margin-top:auto; padding-top:12px; border-top:1px solid var(--line);}
+  .edition .btn + .btn{margin-top:8px;}
+
+  /* ---- faq ---- */
+  details{border-bottom:1px solid var(--line); padding:18px 0;}
+  details:first-of-type{padding-top:0;}
+  summary{
+    cursor:pointer; font-size:15px; color:var(--bone); list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:"+"; color:var(--ghost-teal); font-size:18px;}
+  details[open] summary::after{content:"–";}
+  details p{font-size:14px; color:var(--bone-dim); margin:12px 0 0;}
+  details a{color:var(--ghost-teal);}
+
+  .closing{padding:46px 28px; background:var(--graphite-2); border:1px solid var(--line); text-align:center;}
+  .closing h2{font-size:clamp(28px,4vw,38px); margin:12px auto;}
+  .closing p{max-width:500px; margin:0 auto 22px; color:var(--bone-dim);}
+
+  footer{text-align:center; padding:34px 0 60px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim);}
+  footer a{color:var(--bone-dim);}
 
   /* ---- auth modal ---- */
   .ak-modal-overlay{
@@ -98,99 +200,14 @@
   .ak-modal .ak-close{
     float:right; background:none; border:none; color:var(--bone-dim); cursor:pointer; font-size:18px;
   }
-  .price{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim);}
-  .btn{
-    font-family:'IBM Plex Mono', monospace; font-size:13px; letter-spacing:.04em; text-transform:uppercase;
-    padding:13px 22px; border-radius:2px; text-decoration:none; border:1px solid var(--bone);
-    color:var(--bone); transition:all .18s ease; display:inline-block;
-  }
-  .btn:hover{background:var(--bone); color:var(--graphite);}
-  .btn.primary{background:var(--bone); color:var(--graphite);}
-  .btn.primary:hover{background:transparent; color:var(--bone);}
-  .avail-note{font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim); margin-top:20px;}
 
-  section{padding:48px 0; border-top:1px solid var(--line);}
-  section h2.label{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase;
-    letter-spacing:0.14em; color:var(--ghost-teal); margin:0 0 20px; font-weight:500;
-  }
-
-  .about{display:flex; gap:24px; align-items:flex-start;}
-  .avatar{
-    width:60px; height:60px; border-radius:50%; background:var(--graphite-2);
-    border:1px solid var(--line); flex-shrink:0;
-  }
-  .about p{margin:0; font-size:15.5px; color:var(--bone-dim);}
-
-  ul.points{
-    font-family:'Work Sans', sans-serif; list-style:none; padding:0; margin:18px 0 0;
-    font-size:14.5px; color:var(--bone-dim);
-  }
-  ul.points li{padding:7px 0; padding-left:22px; position:relative;}
-  ul.points li::before{content:"—"; position:absolute; left:0; color:var(--ghost-teal);}
-
-  .excerpt-box{
-    background:var(--graphite-2); border:1px solid var(--line); border-radius:2px;
-    padding:26px 28px; font-family:'Newsreader', serif; font-style:italic; color:var(--bone-dim);
-    font-size:16.5px; line-height:1.6;
-  }
-  .continue{
-    display:block; margin-top:16px; font-size:12.5px; font-family:'IBM Plex Mono', monospace;
-    color:var(--ghost-teal); text-decoration:none; font-style:normal; letter-spacing:.03em;
-  }
-
-  .reviews-empty{
-    background:var(--graphite-2); border:1px dashed var(--line); border-radius:2px;
-    padding:28px; text-align:center; font-family:'Work Sans', sans-serif;
-    color:var(--bone-dim); font-size:14.5px;
-  }
-  .reviews-empty a{color:var(--ghost-teal); text-decoration:underline;}
-
-  .formats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; font-family:'Work Sans', sans-serif;}
-  .format-card{
-    background:var(--graphite-2); border:1px solid var(--line); border-radius:2px;
-    padding:20px 14px; text-align:center;
-  }
-  .format-card .fc-label{font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.05em; margin-bottom:6px; text-transform:uppercase;}
-  .format-card .sub{font-size:12.5px; color:var(--bone-dim);}
-
-  .faq{font-family:'Work Sans', sans-serif;}
-  details{border-bottom:1px solid var(--line); padding:16px 0;}
-  details:first-child{padding-top:0;}
-  summary{
-    cursor:pointer; font-size:15px; color:var(--bone); list-style:none;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  summary::-webkit-details-marker{display:none;}
-  summary::after{content:"+"; color:var(--ghost-teal); font-size:18px;}
-  details[open] summary::after{content:"–";}
-  details p{font-size:14px; color:var(--bone-dim); margin:12px 0 0;}
-
-  .fallback-box{
-    border:1px solid var(--line); padding:32px; text-align:center; background:var(--graphite-2);
-  }
-  .fallback-box h2{font-size:20px; font-style:italic; margin-bottom:10px;}
-  .fallback-box p{color:var(--bone-dim); font-size:14.5px; max-width:44ch; margin:0 auto 22px;}
-  form.mini-form{
-    display:flex; gap:0; max-width:380px; margin:0 auto; border-bottom:1px dashed var(--bone-dim); padding-bottom:12px;
-  }
-  form.mini-form input{
-    flex:1; border:none; background:transparent; font-family:'IBM Plex Mono', monospace;
-    font-size:13.5px; padding:8px 4px; color:var(--bone); outline:none;
-  }
-  form.mini-form input::placeholder{color:rgba(232,227,216,0.35);}
-  form.mini-form button{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; text-transform:uppercase;
-    background:var(--bone); color:var(--graphite); border:none; padding:9px 18px; cursor:pointer; letter-spacing:.04em;
-  }
-
-  footer{text-align:center; padding:34px 0 60px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--bone-dim);}
-  footer a{color:var(--bone-dim);}
-
-  @media (max-width:600px){
+  @media (max-width:650px){
     header.hero{padding:52px 0 40px;}
+    .hero-buy{display:flex; min-width:0;}
     .about{flex-direction:column;}
-    .formats{grid-template-columns:1fr 1fr;}
+    .card-grid,.contents-grid,.edition-grid{grid-template-columns:1fr;}
+    .discovery{padding:46px 0;}
+    .quote-panel{font-size:20px; padding:22px;}
   }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -202,112 +219,120 @@
 <div class="wrap">
 
   <header class="hero">
-    <div class="cover-shot"><picture><source type="image/avif" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.avif 446w" sizes="(max-width:600px) 90vw, 500px"><source type="image/webp" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.webp 446w" sizes="(max-width:600px) 90vw, 500px"><img  alt="Invisible Threads cover" src="images/books/the-mind-files-vol-i-invisible-threads-446.jpg" width="446" height="700" loading="lazy"></picture></div>
+    <div class="cover-shot"><picture><source type="image/avif" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.avif 446w" sizes="190px"><source type="image/webp" srcset="images/books/the-mind-files-vol-i-invisible-threads-446.webp 446w" sizes="190px"><img alt="Invisible Threads cover" src="images/books/the-mind-files-vol-i-invisible-threads-446.jpg" width="446" height="700" loading="eager" fetchpriority="high"></picture></div>
     <span class="eyebrow">The Mind Files &middot; Vol-I</span>
     <h1>Invisible <span class="glitch" data-text="Threads">Threads</span></h1>
     <p class="hook">Ten case files that reveal the hidden forces shaping how you think, choose, and remember — until you start wondering what's shaping you.</p>
-    <div class="buttons" id="buy">
-      <div class="buy-option">
-        <!-- Kindle: point this to your Amazon book listing once it's live -->
-        <a href="#" class="btn primary">Kindle (Amazon)</a>
-        <span class="price">$4.99 / &#8377;249</span>
-      </div>
-      <div class="buy-option digital-edition">
-        <div class="de-label">Digital Edition</div>
-        <div class="de-prices">
-          <span>India &#8377;249</span>
-          <span>International $9.99</span>
-        </div>
-        <p class="de-note">Read online through your private library.</p>
-        <button class="btn primary" id="buyDigitalBtn" data-book-slug="invisible-threads">Buy Digital Edition</button>
-        <button class="btn" id="addToCartBtn" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="9.99">Add to Cart</button>
-      </div>
+
+    <div class="hero-buy" id="buy">
+      <span class="edition-name">Digital Edition</span>
+      <div class="price-line">&#8377;249 <span>India</span> &middot; $5.99 <span>International</span></div>
+      <p class="de-note">Read online in your private library. No download needed.</p>
+      <button class="btn primary js-buy" data-book-slug="invisible-threads">Buy Digital Edition</button>
+      <button class="btn ghost js-cart" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="5.99">Add to Cart</button>
     </div>
-    <p class="avail-note">Available on Amazon.in, Amazon.com &amp; as a Digital Edition in your private library</p>
-    <p id="authStatus" class="avail-note" style="margin-top:6px;"></p>
+    <div><a class="sample-jump" href="#read-sample">Or read a free sample first &darr;</a></div>
+    <p id="authStatus" class="avail-note"></p>
   </header>
 
   <section id="about">
     <h2 class="label">About the Author</h2>
     <div class="about">
-      <div class="avatar"></div>
-      <p>Avinash Kumar writes psychological and conceptual fiction about the space between what the mind experiences and what it can explain — consciousness, perception, memory, identity, and the strange territory where psychology meets mystery.</p>
+      <div class="avatar"><picture><source type="image/avif" srcset="images/author/avinash-kumar-450.avif"><source type="image/webp" srcset="images/author/avinash-kumar-450.webp"><img src="images/author/avinash-kumar-450.jpg" alt="Avinash Kumar" width="450" height="450" loading="lazy"></picture></div>
+      <p>Avinash Kumar writes psychological and conceptual fiction about the space between what the mind experiences and what it can explain — consciousness, perception, memory, identity, and the strange territory where psychology meets mystery. <a href="author-story.html">Read the author's story &rarr;</a></p>
     </div>
   </section>
 
-  <section id="synopsis">
-    <h2 class="label">What This Book Is About</h2>
-    <p style="color:var(--bone-dim); font-size:16px; margin:0;">Ten standalone case files, each unpacking a different hidden mechanism of the mind — the moment before a decision, the confidence behind a false memory, the pull of a stranger's trust. Written for readers who want their fiction to leave them thinking differently about their own mind, not just entertained for an evening.</p>
-      <ul class="points">
-        <li>Ten self-contained psychological case studies, woven into one throughline</li>
-        <li>Grounded in real cognitive science, dramatized as fiction</li>
-        <li>For readers of conceptual thrillers who want ideas as much as suspense</li>
-      </ul>
+  <section class="discovery" id="meet-the-book">
+    <span class="pill-label">Meet the Book</span>
+    <h2 class="bigline">Don't buy it because I told you it's good.</h2>
+    <p class="subline">Open it. Read it. Decide for yourself. Step into the investigation before you choose your edition.</p>
+    <a class="btn teal" href="#read-sample">Read a free sample &darr;</a>
   </section>
 
-  <section id="excerpt">
-    <h2 class="label">Read a Free Sample</h2>
-    <div class="excerpt-box">
-      [Insert the opening lines of Case File 01 here — enough to establish voice and hook, roughly 100–150 words, ending on a line that makes the next page necessary.]
-      <a href="#" class="continue">Continue reading — buy the full book &rarr;</a>
+  <section id="read-sample">
+    <h2 class="label">Open the Case Files</h2>
+    <p class="intro">A small preview of the experience inside: human stories, behavioural clues, and the hidden psychological forces that may be shaping everyday decisions.</p>
+    <div class="card-grid">
+      <article class="card"><span class="pill-label">Sample · The Hook</span><h3>The Last Seat</h3><p>At 9:42 p.m., Neha had rejected the hotel. By 9:53, she had booked it. The room had not changed. So what had?</p><a class="card-link" href="#sample-excerpt">Read the excerpt &rarr;</a></article>
+      <article class="card"><span class="pill-label">Inside the Method</span><h3>Look beneath the behaviour.</h3><p>Follow the evidence from the visible action to the invisible process: scarcity, loss aversion, urgency, and anticipated regret.</p><a class="card-link" href="#what-inside">Explore the case files &rarr;</a></article>
+    </div>
+    <div id="sample-excerpt" class="quote-panel">“The hotel hadn't changed. The room hadn't changed. The city hadn't changed. Only one thing had changed. Time.”<small>From Case File 07 · The Last Seat</small></div>
+  </section>
+
+  <section id="what-inside">
+    <h2 class="label">What You'll Find Inside</h2>
+    <p class="intro">Ten case files. Each begins with a human mystery and follows the clues toward a deeper understanding of how people think, choose, trust, and remember. Four of them:</p>
+    <div class="contents-grid">
+      <article class="content-item"><span class="num">Case File 01</span><h3>The Elevator Stranger</h3><p>First impressions, mirroring, and the strange familiarity of a stranger.</p></article>
+      <article class="content-item"><span class="num">Case File 02</span><h3>The Coffee Shop</h3><p>How small acts of help can change the way we see one another.</p></article>
+      <article class="content-item"><span class="num">Case File 06</span><h3>The Perfect Yes</h3><p>When agreement reveals more than the words themselves.</p></article>
+      <article class="content-item"><span class="num">Case File 07</span><h3>The Last Seat</h3><p>Scarcity, loss aversion, urgency, and the fear of missing out.</p></article>
+    </div>
+  </section>
+
+  <section id="discover">
+    <h2 class="label">What You'll Discover</h2>
+    <div class="card-grid">
+      <article class="card"><span class="pill-label">01 · Notice</span><h3>The moment behaviour changes</h3><p>Learn to look beyond what someone did and ask what might have shifted beneath the surface.</p></article>
+      <article class="card"><span class="pill-label">02 · Investigate</span><h3>Separate clues from assumptions</h3><p>Explore psychological explanations while keeping room for alternative hypotheses and unanswered questions.</p></article>
+      <article class="card"><span class="pill-label">03 · Understand</span><h3>See the invisible influences</h3><p>Connect everyday choices to ideas from cognitive and social psychology, presented through stories.</p></article>
+      <article class="card"><span class="pill-label">04 · Apply</span><h3>Become a better observer</h3><p>Take the questions from the case files into conversations, decisions, and your own habits of thought.</p></article>
     </div>
   </section>
 
   <section id="reviews">
     <h2 class="label">What Early Readers Are Saying</h2>
     <div class="reviews-empty">
-      Reviews will appear here once Invisible Threads is live on <a href="#">Amazon</a> and <a href="#">Goodreads</a> — pulled directly from verified readers, not collected on this page.
+      Reader reviews will appear here once early readers have finished the book — real reviews from real readers, never written for this page.
     </div>
   </section>
 
   <section id="formats">
-    <h2 class="label">Formats &amp; Availability</h2>
-    <div class="formats">
-      <div class="format-card">
-        <div class="fc-label">Kindle</div>
-        <div class="sub">Amazon.in &amp; Amazon.com</div>
-      </div>
-      <div class="format-card">
-        <div class="fc-label">PDF</div>
-        <div class="sub">Direct download, worldwide</div>
-      </div>
-      <div class="format-card">
-        <div class="fc-label">Paperback</div>
-        <div class="sub">Coming soon</div>
-      </div>
+    <h2 class="label">Choose Your Edition</h2>
+    <p class="intro">Read the sample first; buy only when the book feels right for you.</p>
+    <div class="edition-grid">
+      <article class="edition featured">
+        <span class="edition-name">Digital · Available now</span>
+        <h3>Private Library Edition</h3>
+        <p>Read online in your personal library, in a reader designed for focused reading.</p>
+        <ul><li>Unlocked right after payment</li><li>Read in any modern browser — phone, tablet or computer</li><li>Stays in your library; sign in to come back anytime</li></ul>
+        <div class="price-large">&#8377;249</div>
+        <div class="price-sub">$5.99 international</div>
+        <button class="btn primary js-buy" data-book-slug="invisible-threads">Buy Digital Edition</button>
+        <button class="btn ghost js-cart" data-slug="invisible-threads" data-title="The Mind Files — Vol-I: Invisible Threads" data-price-inr="249" data-price-usd="5.99">Add to Cart</button>
+      </article>
+      <article class="edition">
+        <span class="edition-name">Kindle Edition</span>
+        <h3>Read on Kindle</h3>
+        <p>For readers who prefer Amazon's Kindle app or e-reader.</p>
+        <ul><li>Kindle app or device</li><li>Purchased through Amazon</li></ul>
+        <!-- When the Amazon listing is live, replace the status line with:
+             <a class="btn" href="AMAZON_URL" target="_blank" rel="noopener">Buy on Amazon</a> -->
+        <div class="status">Coming soon</div>
+      </article>
+      <article class="edition">
+        <span class="edition-name">Print Edition</span>
+        <h3>Paperback</h3>
+        <p>A physical copy for your shelf, desk, or reading bag.</p>
+        <ul><li>Printed edition</li></ul>
+        <div class="status">Coming soon</div>
+      </article>
     </div>
   </section>
 
-  <section class="faq" id="faq">
-    <h2 class="label">Frequently Asked Questions</h2>
-    <details>
-      <summary>What's the difference between the Kindle and PDF versions?</summary>
-      <p>The Kindle edition is read through Amazon's Kindle app or device and purchased via Amazon. The PDF is a direct download you can read on any device, purchased straight from this page — same book, different reading experience.</p>
-    </details>
-    <details>
-      <summary>How fast will I get the PDF after buying?</summary>
-      <p>[Confirm with your checkout provider — typically instant, delivered by email right after payment.]</p>
-    </details>
-    <details>
-      <summary>Is there a refund policy?</summary>
-      <p>[Add your actual policy here — many authors mark digital downloads as final sale once delivered, with exceptions handled case-by-case via direct contact.]</p>
-    </details>
-    <details>
-      <summary>Will there be a print edition?</summary>
-      <p>A paperback is planned — sign up below to be notified the moment it's available.</p>
-    </details>
+  <section id="faq">
+    <h2 class="label">Before You Decide</h2>
+    <details><summary>Can I read the book before buying?</summary><p>Yes — the <a href="#read-sample">free sample</a> above lets you experience the writing first.</p></details>
+    <details><summary>What is the Private Library Edition?</summary><p>An online edition you read in your private library on this site. Sign in (or create an account), pay once, and the book appears in <a href="my-library.html">My Library</a> straight away. Come back any time and sign in to keep reading.</p></details>
+    <details><summary>Will I receive a PDF?</summary><p>No. The Digital Edition is read online in your library, not downloaded — so there's nothing to store or lose, and it's always where you left it.</p></details>
+    <details><summary>Which currency will I pay in?</summary><p>Checkout is in Indian rupees (&#8377;249). International cards are accepted; your bank converts the amount, which comes to about $5.99.</p></details>
+    <details><summary>Is there a refund policy?</summary><p>Because the book is unlocked instantly, Digital Edition purchases are final. If anything goes wrong — a payment that didn't unlock the book, or a double charge — write to <a href="mailto:authoravinashkumar@gmail.com">authoravinashkumar@gmail.com</a> and it will be sorted out.</p></details>
+    <details><summary>Where can I buy the Kindle or paperback edition?</summary><p>Both are coming soon. They'll be linked here as soon as they're available.</p></details>
   </section>
 
-  <section id="fallback">
-    <div class="fallback-box">
-      <span class="eyebrow" style="justify-content:center;">Not Ready Yet?</span>
-      <h2 style="margin-top:14px;">Get the first case file free.</h2>
-      <p>No pressure to buy — just the opening case file sent straight to your inbox, so you can decide for yourself.</p>
-      <form class="mini-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent ✓'; this.querySelector('input').value='';">
-        <input type="email" placeholder="you@email.com" required>
-        <button type="submit">Send it</button>
-      </form>
-    </div>
+  <section id="not-ready">
+    <div class="closing"><span class="pill-label">No Pressure</span><h2>Not ready to choose?</h2><p>Start with the sample. Let the writing earn your attention before the book asks for your money.</p><a class="btn teal" href="#read-sample">Meet the book first</a></div>
   </section>
 
   <footer>
@@ -335,7 +360,7 @@
 
 <script>
   let akMode = 'signin';       // 'signin' | 'signup'
-  let akPendingAction = null;  // queued action to run right after a successful login
+  let akPendingBuyBtn = null;  // buy button to resume right after a successful login
 
   function akOpenModal(){ document.getElementById('akAuthModal').classList.add('open'); }
   function akCloseModal(){
@@ -382,9 +407,10 @@
       }
       akCloseModal();
       await akRefreshAuthStatus();
-      if (akPendingAction === 'buy') {
-        akPendingAction = null;
-        performPurchase();
+      if (akPendingBuyBtn) {
+        const btn = akPendingBuyBtn;
+        akPendingBuyBtn = null;
+        performPurchase(btn);
       }
     } catch (e) {
       errEl.textContent = e.message || 'Something went wrong.';
@@ -396,19 +422,31 @@
     const el = document.getElementById('authStatus');
     if (session) {
       const name = session.user.user_metadata?.name || session.user.email;
-      el.innerHTML = `Signed in as ${name} &middot; <a href="#" onclick="akSignOut(); return false;">Sign out</a>`;
+      el.textContent = `Signed in as ${name} · `;
+      const out = document.createElement('a');
+      out.href = '#';
+      out.textContent = 'Sign out';
+      out.onclick = () => { akSignOut(); return false; };
+      el.appendChild(out);
     } else {
       el.textContent = '';
     }
   }
 
-  async function performPurchase(){
-    const btn = document.getElementById('buyDigitalBtn');
-    const originalText = btn.textContent;
-    btn.disabled = true;
+  const buyButtons = document.querySelectorAll('.js-buy');
+  function setBuyButtons(disabled, text){
+    buyButtons.forEach(b => {
+      b.disabled = disabled;
+      if (!b.dataset.label) b.dataset.label = b.textContent;
+      b.textContent = text || b.dataset.label;
+    });
+  }
+
+  async function performPurchase(btn){
+    setBuyButtons(true);
     btn.textContent = 'Starting checkout…';
     try {
-      const order = await akCallFunction('create-order', { bookSlug: 'invisible-threads', currency: 'INR' });
+      const order = await akCallFunction('create-order', { bookSlug: btn.dataset.bookSlug, currency: 'INR' });
 
       const rzp = new Razorpay({
         key: order.razorpayKeyId,
@@ -430,40 +468,42 @@
             window.location.href = 'my-library.html?purchased=1';
           } catch (e) {
             alert(e.message || 'Your payment was received. Your library is being updated. Please refresh or contact support if access does not appear.');
-            btn.disabled = false;
-            btn.textContent = originalText;
+            setBuyButtons(false);
           }
         },
         modal: {
-          ondismiss: function () {
-            btn.disabled = false;
-            btn.textContent = originalText;
-          }
+          ondismiss: function () { setBuyButtons(false); }
         }
       });
       rzp.open();
     } catch (e) {
       alert(e.message === 'NOT_LOGGED_IN' ? 'Please sign in first.' : (e.message || 'Your payment could not be started. Please try again.'));
-      btn.disabled = false;
-      btn.textContent = originalText;
+      setBuyButtons(false);
     }
   }
 
-  document.getElementById('buyDigitalBtn').addEventListener('click', async () => {
+  buyButtons.forEach(btn => btn.addEventListener('click', async () => {
     const session = await akGetSession();
     if (!session) {
-      akPendingAction = 'buy';
+      akPendingBuyBtn = btn;
       akMode = 'signin';
       akOpenModal();
       return;
     }
-    performPurchase();
-  });
+    performPurchase(btn);
+  }));
 
   // Cart stays client-side/UI-only — never authoritative for price or payment.
-  document.getElementById('addToCartBtn').addEventListener('click', function () {
-    let cart = [];
-    try { cart = (JSON.parse(localStorage.getItem('akCart')) || []).filter(i => i && i.slug); } catch (e) {}
+  const cartButtons = document.querySelectorAll('.js-cart');
+  function readCart(){
+    try { return (JSON.parse(localStorage.getItem('akCart')) || []).filter(i => i && i.slug); } catch (e) { return []; }
+  }
+  function markInCart(){
+    cartButtons.forEach(b => { b.dataset.inCart = '1'; b.textContent = 'In cart · Checkout →'; });
+  }
+  cartButtons.forEach(btn => btn.addEventListener('click', function () {
+    if (this.dataset.inCart) { window.location.href = 'checkout.html'; return; }
+    const cart = readCart();
     if (!cart.some(i => i.slug === this.dataset.slug)) {
       cart.push({
         slug: this.dataset.slug,
@@ -472,11 +512,10 @@
         priceUsd: parseFloat(this.dataset.priceUsd) || 0,
       });
     }
-    if (this.dataset.inCart) { window.location.href = 'checkout.html'; return; }
     try { localStorage.setItem('akCart', JSON.stringify(cart)); } catch (e) {}
-    this.dataset.inCart = '1';
-    this.textContent = 'In cart · Checkout →';
-  });
+    markInCart();
+  }));
+  if (cartButtons.length && readCart().some(i => i.slug === cartButtons[0].dataset.slug)) markInCart();
 
   akRefreshAuthStatus();
 </script>
